@@ -1,0 +1,2 @@
+# ignore environment variables
+dotenv.env
