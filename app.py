@@ -26,22 +26,12 @@ amadeus = Client(
 # except ResponseError as error:
 #     print(error)
 
-
-# flights = amadeus.shopping.flight_offers_search.get(
-#     originLocationCode='LON',
-#     destinationLocationCode='PAR',
-#     departureDate='2022-12-05',
-#     adults='1',
-#     max='5'
-# ).data
-
-# response = []
-# for entry in flights:
-#     response.append(amadeus.shopping.flight_offers.pricing.post(entry).data)
-#     print(json.dumps(response, indent=3))
-
 @app.route('/')
 def index():
+    return render_template('index.html')
+
+@app.route('/search')
+def search():
     
     # check prices
     try:
@@ -61,4 +51,4 @@ def index():
     except ResponseError as error:
         print(error)
 
-    return render_template('index.html', response=response)
+    return render_template('search.html', response=response)
