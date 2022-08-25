@@ -20,7 +20,7 @@ amadeus = Client(
 )
 
 # try:
-#     response = amadeus.airport.direct_destinations.get(departureAirportCode='MAD')
+#     response = amadeus.airport.direct_destinations.get(departureAirportCode='OPO')
 #     for entry in response.data:
 #         print(entry["name"], entry["iataCode"])
 # except ResponseError as error:
