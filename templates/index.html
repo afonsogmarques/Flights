@@ -5,14 +5,30 @@
 {% endblock %}
 
 {% block main %}
-    <div>
-        <form>
-            <div>
-                <label for="origin" class="form-label">From</label>
-                <select class="form-control" name="origin" id="origin">
-                    <option></option>
-                </select>
+    <div class="mb-5">
+        <h1>Where would you like to fly to today?</h1>
+    </div>
+    <div class="d-flex justify-content-center mt-5">
+        <div class="w-50">
+            <form action="/" method="post">
+            <div class="d-flex flex-row justify-content-center">
+                <div class="pe-5">
+                    <label for="destination" class="form-label">Destination</label>
+                    <select class="form-control" name="destination" id="destination">
+                        {% for name in airport_names %}
+                        <option>{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="origin" class="form-label">Date of travel</label>
+                    <input class="form-control date" type="date" name="date">
+                </div>
+                <div class="d-flex align-items-end ps-5">
+                    <input class="form-control btn btn-primary" type="submit" value="Search">
+                </div>
             </div>
-        </form>
+            </form>
+        </div>
     </div>
 {% endblock %}
