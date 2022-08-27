@@ -1,0 +1,13 @@
+.dropdown a {
+    text-decoration: none;
+    color: initial;
+}
+
+.dropdown-toggle::after {
+    visibility: hidden;
+}
+
+#results .dropdown-menu.show {
+    position: initial!important;
+    transform: translate3d(0px, -19px, 0px)!important;
+}
