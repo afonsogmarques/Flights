@@ -47,7 +47,7 @@ def index():
     if request.method == 'POST':
         destination = request.form.get('destination')
         date = request.form.get('date')
-        
+
         response = []
 
         try:
@@ -55,7 +55,8 @@ def index():
                 originLocationCode='MAD',
                 destinationLocationCode='FRA',
                 departureDate=date,
-                adults='1'
+                adults='1',
+                max='7'
             ).data
 
             for entry in flights:
@@ -63,12 +64,11 @@ def index():
                 response.append(fetchedData)
                 # print(json.dumps(response.data, indent=3)
                 # print(entry)
-                numberOfLegs = len(fetchedData['flightOffers'][0]['itineraries'][0]['segments'])
 
         except ResponseError as error:
             print(error)
 
-        return render_template('results.html', date=date, destination=destination, response=response, legs=numberOfLegs)
+        return render_template('results.html', date=date, destination=destination, response=response)
 
     else:
         with sqlite3.connect('airports.db', check_same_thread=False) as con:

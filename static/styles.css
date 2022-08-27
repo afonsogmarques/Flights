@@ -11,3 +11,8 @@
     position: initial!important;
     transform: translate3d(0px, -19px, 0px)!important;
 }
+
+.card {
+    opacity: 0.87;
+    border-radius: 0.9rem!important;
+}
