@@ -20,27 +20,6 @@ amadeus = Client(
     client_secret=os.getenv('CLIENT_SECRET')
 )
 
-# try:
-#     flights = amadeus.shopping.flight_offers_search.get(
-#         originLocationCode='MAD',
-#         destinationLocationCode='FRA',
-#         departureDate='2022-09-14',
-#         adults='1'
-#     ).data
-
-#     for entry in flights:
-#         response = amadeus.shopping.flight_offers.pricing.post(entry).data
-#         # print(json.dumps(response.data, indent=3))
-#         numberOfLegs = len(response['flightOffers'][0]['itineraries'][0]['segments'])
-#         for index in range(numberOfLegs):
-#             print(response['flightOffers'][0]['itineraries'][0]['segments'][index]['arrival']['iataCode'], end=" ")
-#         print()
-        
-#         print(numberOfLegs)
-
-# except ResponseError as error:
-#     print(error)
-
 with sqlite3.connect('airports.db', check_same_thread=False) as con:
     cursor = con.cursor()
     cursor.execute('SELECT name FROM airports ORDER BY name')
