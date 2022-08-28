@@ -7,21 +7,21 @@
 {% block main %}
 <div class="d-flex justify-content-center align-items-center flex-column">
     <h1 class="mb-3">Flights to {{ destination }}</h1>
-    <h5 class="text-muted mb-5">{{ date }}</h5>
-    <div class="d-flex justify-content-center w-25" id="results">
-        <div class="w-100">
+    <h5 class="text-muted mb-5 w-75">{{ date }}</h5>
+    <div class="d-flex justify-content-center w-75" id="results">
+        <div class="w-75">
             <div class="dropdown">
                 {% for entry in response %}
                     <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="card bg-primary text-white rounded-4">
-                            <div class="d-flex flex-row justify-content-around p-2 pt-3 pb-4">
+                            <div class="d-flex flex-row justify-content-around p-2 pt-4 pb-4">
                                 <div class="d-flex justify-content-center flex-column">
                                     <p class=" text-start mb-0">From</p>
                                     <h3>{{ entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['iataCode'] }}</h3>
                                 </div>
                                 <div class="d-flex justify-content-center flex-column">
                                     <p class=" text-start mb-0">To</p>
-                                    <h3>{{ entry['flightOffers'][0]['itineraries'][0]['segments'][0]['arrival']['iataCode'] }}</h3>
+                                    <h3>{{ entry['flightOffers'][0]['itineraries'][0]['segments'][(entry['flightOffers'][0]['itineraries'][0]['segments']|length) - 1]['arrival']['iataCode'] }}</h3>
                                 </div>
                                 <div class="d-flex align-items-center">
                                     <h3 class="mb-0">&euro;{{ entry['flightOffers'][0]['price']['grandTotal'] }}</h3>
@@ -29,17 +29,29 @@
                             </div>
                         </div>
                     </a>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu rounded-4 pt-3 pb-3">
                         <div class="d-flex align-items-center flex-column">
-                            <h6 class="">{{ (entry['flightOffers'][0]['itineraries'][0]['segments']|length) - 1 }} stopover  </h6>
-                            <div class="d-flex flex-row justify-content-around w-100">
+                            {% if (entry['flightOffers'][0]['itineraries'][0]['segments']|length) == 1  %}
+                                <h6 class="text-success">Direct flight</h6>
+                            {% endif %}
+                            {% if (entry['flightOffers'][0]['itineraries'][0]['segments']|length) >= 2 %}
+                                {% if (entry['flightOffers'][0]['itineraries'][0]['segments']|length) == 2 %}
+                                    <h6 class="text-danger">1 stopover</h6>
+                                {% else %}
+                                    <h6 class="text-danger">{{ (entry['flightOffers'][0]['itineraries'][0]['segments']|length) - 1 }} stopovers</h6>
+                                {% endif %}
+                            {% endif %}
+                            <div class="d-flex flex-row justify-content-center align-items-center w-100 ps-5 pe-5">
                                 <h4>
                                     {{ entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['iataCode'] }}
                                 </h4>
                                 {% for i in range(entry['flightOffers'][0]['itineraries'][0]['segments']|length) %}
-                                    <h4>
+                                <div class="w-25 bg-secondary ms-3 me-3" style="height: 3px;"></div>
+                                <div>
+                                    <h4 class="mb-0">
                                         {{ entry['flightOffers'][0]['itineraries'][0]['segments'][i]['arrival']['iataCode'] }}
                                     </h4>
+                                </div>
                                 {% endfor %}
                             </div>
                         </div>

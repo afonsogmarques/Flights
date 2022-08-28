@@ -7,7 +7,7 @@
 {% block main %}
 <div class="d-flex justify-content-center align-items-center flex-column" style="height: 55vh;">
     <div class="mb-5">
-        <h1>Where will you be flying to today?</h1>
+        <h1>Where will you be flying to?</h1>
     </div>
     <div class="d-flex justify-content-center mt-3">
         <div style="width: 80%">
@@ -15,7 +15,8 @@
             <div class="d-flex flex-row justify-content-center">
                 <div class="pe-5">
                     <label for="destination" class="form-label">Destination</label>
-                    <select class="form-control" name="destination" id="destination">
+                    <select class="form-control dropdown text-center text-muted" name="destination" id="destination">
+                        <option selected="true" disabled>Select airport</option>
                         {% for name in airport_names %}
                         <option>{{ name }}</option>
                         {% endfor %}

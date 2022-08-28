@@ -3,8 +3,8 @@
     color: initial;
 }
 
-.dropdown-toggle::after {
-    visibility: hidden;
+#results .dropdown-toggle::after {
+    visibility: hidden!important;
 }
 
 #results .dropdown-menu.show {
@@ -12,7 +12,12 @@
     transform: translate3d(0px, -19px, 0px)!important;
 }
 
-.card {
+#results .card {
     opacity: 0.87;
+    border: none;
     border-radius: 0.9rem!important;
+}
+
+#results .dropdown-menu {
+    border-radius: 1rem;
 }

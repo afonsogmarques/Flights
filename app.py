@@ -41,6 +41,20 @@ amadeus = Client(
 # except ResponseError as error:
 #     print(error)
 
+with sqlite3.connect('airports.db', check_same_thread=False) as con:
+    cursor = con.cursor()
+    cursor.execute('SELECT name FROM airports ORDER BY name')
+    rows = cursor.fetchall()
+
+    airport_names = []
+    for row in rows:
+        row = row[0]
+        airport_names.append(row)
+        
+    for name in airport_names:
+        if None in airport_names:
+            airport_names.remove(None)
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
 
@@ -51,19 +65,44 @@ def index():
         response = []
 
         try:
-            flights = amadeus.shopping.flight_offers_search.get(
-                originLocationCode='MAD',
-                destinationLocationCode='FRA',
-                departureDate=date,
-                adults='1',
-                max='7'
-            ).data
+            airport = amadeus.reference_data.locations.get(keyword=destination, subType="AIRPORT")
+            if len(airport.data) == 0:
+                print("Airport doesn't exist")
 
-            for entry in flights:
-                fetchedData = amadeus.shopping.flight_offers.pricing.post(entry).data
-                response.append(fetchedData)
-                # print(json.dumps(response.data, indent=3)
-                # print(entry)
+            else:
+                iataCode = airport.data[0]["iataCode"]
+
+                for index, row in enumerate(airport_names):
+                    try:
+                        airport2 = amadeus.reference_data.locations.get(keyword=row, subType="AIRPORT")
+                        if len(airport2.data) == 0:
+                            print(f"{index}. {row} doesn't exist.")
+                            if index == 100:
+                                break
+                            continue
+
+                        else:
+                            print(f"{index}. {row} exists")
+                            try:
+                                flights = amadeus.shopping.flight_offers_search.get(
+                                    originLocationCode=airport2.data[0]["iataCode"],
+                                    destinationLocationCode=iataCode,
+                                    departureDate=date,
+                                    adults='1',
+                                    max='3'
+                                ).data
+
+                                for entry in flights:
+                                    fetchedData = amadeus.shopping.flight_offers.pricing.post(entry).data
+                                    response.append(fetchedData)
+                                    # print(json.dumps(response.data, indent=3)
+                                    # print(entry)
+
+                            except ResponseError as error:
+                                print(f"{index}. {error}")
+                            
+                    except ResponseError as error:
+                        print(f"{index}. {error}")
 
         except ResponseError as error:
             print(error)
@@ -71,17 +110,4 @@ def index():
         return render_template('results.html', date=date, destination=destination, response=response)
 
     else:
-        with sqlite3.connect('airports.db', check_same_thread=False) as con:
-            cursor = con.cursor()
-            cursor.execute('SELECT name FROM airports ORDER BY name')
-            rows = cursor.fetchall()
-
-            airport_names = []
-            for row in rows:
-                row = row[0]
-                airport_names.append(row)
-                
-            for name in airport_names:
-                if None in airport_names:
-                    airport_names.remove(None)
-            return render_template('index.html', airport_names=airport_names)
+        return render_template('index.html', airport_names=airport_names)
