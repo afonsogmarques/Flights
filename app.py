@@ -22,7 +22,7 @@ amadeus = Client(
 
 with sqlite3.connect('airports.db', check_same_thread=False) as con:
     cursor = con.cursor()
-    cursor.execute('SELECT name FROM airports ORDER BY name')
+    cursor.execute('SELECT name FROM amadeus_airports ORDER BY name')
     rows = cursor.fetchall()
 
     airport_names = []
@@ -33,6 +33,17 @@ with sqlite3.connect('airports.db', check_same_thread=False) as con:
     for name in airport_names:
         if None in airport_names:
             airport_names.remove(None)
+    
+    # for index, name in enumerate(airport_names):
+    #     try:
+    #         airport = amadeus.reference_data.locations.get(keyword=name, subType="AIRPORT")
+    #         if len(airport.data) == 0:
+    #             continue
+    #         else:
+    #             print(f"{index}. {name}")
+    #             cursor.execute('INSERT OR IGNORE INTO amadeus_airports SELECT * FROM airports WHERE name = ?', (name,))
+    #     except ResponseError as error:
+    #         print(f"error {error}")
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -56,8 +67,8 @@ def index():
                         airport2 = amadeus.reference_data.locations.get(keyword=row, subType="AIRPORT")
                         if len(airport2.data) == 0:
                             print(f"{index}. {row} doesn't exist.")
-                            if index == 100:
-                                break
+                            # if index == 30:
+                            #     break
                             continue
 
                         else:
