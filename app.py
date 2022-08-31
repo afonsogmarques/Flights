@@ -20,12 +20,6 @@ amadeus = Client(
     client_secret=os.getenv('CLIENT_SECRET')
 )
 
-# try:
-#     test = amadeus.reference_data.locations.get(keyword='LIS', subType='AIRPORT')
-#     print(json.dumps(test.data, indent=3))
-# except ResponseError as error:
-#     print(f"error {error}")
-
 with sqlite3.connect('airports.db', check_same_thread=False) as con:
     cursor = con.cursor()
     cursor.execute('SELECT code FROM airports3')
@@ -42,18 +36,46 @@ with sqlite3.connect('airports.db', check_same_thread=False) as con:
 
     cursor.close()
 
+    countries = []
+
     cursor2 = con.cursor()
-    cursor2.execute('SELECT name FROM airports3 ORDER BY name')
-    nameRows = cursor2.fetchall()
+    cursor2.execute('SELECT DISTINCT countryName FROM airports3 ORDER BY countryName')
+    countryRows = cursor2.fetchall()
 
-    airport_names = []
-    for row in nameRows:
-        row = row[0]
-        airport_names.append(row)
+    airport_count = {}
 
-    for name in airport_names:
-        if None in airport_names:
-            airport_names.remove(None)
+    cursor3 = con.cursor()
+
+    for country in countryRows:
+        country = country[0]
+        countries.append([country])
+        
+        cursor3.execute('SELECT COUNT(*) FROM airports3 WHERE countryName = ?', (country,))
+        count = cursor3.fetchone()
+        airport_count.update({country: count[0]})
+    
+    airport_list = {}
+
+    cursor4 = con.cursor()
+    cursor4.execute('SELECT countryName, name FROM airports3 ORDER BY countryName')
+    result_set = cursor4.fetchall()
+
+    for i, country in enumerate(countries):
+        print(country[0])
+        for row in result_set:
+            if row[0] == country[0]:
+                countries[i].append(row[1])
+
+    for country in countries:
+        print(country)
+
+    print()
+    print(airport_count)
+
+    for name in countries:
+        if None in countries:
+            countries.remove(None)
+
 
     cursor2.close()
     
@@ -79,7 +101,6 @@ def index():
             cursor = con.cursor()
             cursor.execute('SELECT code FROM airports3 WHERE name = ?', (destination,))
             iataCode = cursor.fetchone()
-            print(iataCode[0])
         
         response = []
 
@@ -113,4 +134,4 @@ def index():
         return render_template('results.html', date=date, destination=destination, response=response)
 
     else:
-        return render_template('index.html', airport_codes=airport_names)
+        return render_template('index.html', countries=countries, airport_count=airport_count)
