@@ -17,7 +17,7 @@
                     <label for="destination" class="form-label">Destination</label>
                     <select class="form-control dropdown text-center text-muted" name="destination" id="destination">
                         <option selected="true" disabled>Select airport</option>
-                        {% for name in airport_names %}
+                        {% for name in airport_codes %}
                         <option>{{ name }}</option>
                         {% endfor %}
                     </select>
