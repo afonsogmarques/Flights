@@ -42,15 +42,21 @@
                                 {% endif %}
                             {% endif %}
                             <div class="d-flex flex-row justify-content-center align-items-center w-100 ps-5 pe-5">
-                                <h4 class="mb-0">
-                                    {{ entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['iataCode'] }}
-                                </h4>
+                                <div class="d-flex flex-column align-items-center">
+                                    <h4 class="mb-0">
+                                        {{ entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['iataCode'] }}
+                                    </h4>
+                                    <h6 class="text-muted fw-light mt-1 mb-0">Localização</h6>
+                                </div>
                                 {% for i in range(entry['flightOffers'][0]['itineraries'][0]['segments']|length) %}
                                 <div class="w-25 bg-secondary ms-3 me-3" style="height: 3px;"></div>
                                 <div>
-                                    <h4 class="mb-0">
-                                        {{ entry['flightOffers'][0]['itineraries'][0]['segments'][i]['arrival']['iataCode'] }}
-                                    </h4>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <h4 class="mb-0">
+                                            {{ entry['flightOffers'][0]['itineraries'][0]['segments'][i]['arrival']['iataCode'] }}
+                                        </h4>
+                                        <h6 class="text-muted fw-light mt-1 mb-0">Localização</h6>
+                                    </div>
                                 </div>
                                 {% endfor %}
                             </div>

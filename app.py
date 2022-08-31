@@ -105,6 +105,8 @@ def index():
         response = []
 
         for index, code in enumerate(airport_codes):
+            if index == 10:
+                break
             try:
                 airport2 = amadeus.reference_data.locations.get(keyword=code, subType="AIRPORT,CITY")
                 
@@ -118,7 +120,7 @@ def index():
                             destinationLocationCode=iataCode,
                             departureDate=date,
                             adults='1',
-                            max='5'
+                            max='1'
                         ).data
 
                         for entry in flights:
