@@ -95,15 +95,15 @@ def index():
         response = []
 
         for index, code in enumerate(airport_codes):
-            # if index == 15:
-            #     break
+            if index == 15:
+                break
             try:
                 flights = amadeus.shopping.flight_offers_search.get(
                     originLocationCode=code,
                     destinationLocationCode=iataCode,
                     departureDate=date,
                     adults='1',
-                    max='4'
+                    max='2'
                 ).data
 
                 for entry in flights:

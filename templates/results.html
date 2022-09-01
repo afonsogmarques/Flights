@@ -20,6 +20,10 @@
                                     <p class=" text-start mb-0">From</p>
                                     <h3>{{ entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['iataCode'] }}</h3>
                                 </div>
+                                <div class="d-flex justify-content-center flex-column">
+                                    <p class=" text-start mb-0">Departure</p>
+                                    <h3 id="time">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['at'] }}</h3>
+                                </div>
                                 <div class="d-flex align-items-center">
                                     {% if (entry['flightOffers'][0]['itineraries'][0]['segments']|length) == 1 %}
                                         <h6 class="mb-0" id="direct">Direct flight</h6>
@@ -31,6 +35,10 @@
                                             <h6 class="mb-0" id="two-stop">{{ (entry['flightOffers'][0]['itineraries'][0]['segments']|length) - 1 }} stopovers</h6>
                                         {% endif %}
                                     {% endif %}
+                                </div>
+                                <div class="d-flex justify-content-center flex-column">
+                                    <p class=" text-start mb-0">Arrival</p>
+                                    <h3 id="time">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][(entry['flightOffers'][0]['itineraries'][0]['segments']|length) - 1]['arrival']['at'] }}</h3>
                                 </div>
                                 <div class="d-flex justify-content-center flex-column">
                                     <p class=" text-start mb-0">To</p>
@@ -46,21 +54,23 @@
                         <div class="d-flex align-items-center flex-column">
                             <div class="d-flex flex-row justify-content-center align-items-center w-100 ps-5 pe-5">
                                 <div class="d-flex flex-column align-items-center">
-                                    <h4 class="mb-0" id="iataCode">
-                                        {{ entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['iataCode'] }}
-                                    </h4>
+                                    <h6 class="text-muted fw-light text-center" id="time">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['at'] }}</h6>
+                                    <h4 class="mb-0" id="iataCode">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['iataCode'] }}</h4>
                                     <h6 class="text-muted fw-light mt-1 mb-0 text-center" id="location">{{ codeTranslator[entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['iataCode']] }}</h6>
                                 </div>
                                 {% for i in range(entry['flightOffers'][0]['itineraries'][0]['segments']|length) %}
-                                <div class="w-25 bg-secondary ms-3 me-3" style="height: 3px;"></div>
-                                <div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <h4 class="mb-0" id="iataCode">
-                                            {{ entry['flightOffers'][0]['itineraries'][0]['segments'][i]['arrival']['iataCode'] }}
-                                        </h4>
-                                        <h6 class="text-muted fw-light mt-1 mb-0 text-center" id="location">{{ codeTranslator[entry['flightOffers'][0]['itineraries'][0]['segments'][i]['arrival']['iataCode']] }}</h6>
+                                    <div class="w-25 bg-secondary ms-3 me-3" style="height: 3px;"></div>
+                                    <div>
+                                        <div class="d-flex flex-column align-items-center">
+                                            {% if (i == entry['flightOffers'][0]['itineraries'][0]['segments']|length) - 1 %}
+                                                <h6 class="text-muted fw-light text-center" id="time">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][i]['arrival']['at'] }}</h6>
+                                            {% else %}
+                                                <h6 class="text-muted fw-light text-center" id="time">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][i]['departure']['at'] }}</h6>
+                                            {% endif %}
+                                            <h4 class="mb-0" id="iataCode">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][i]['arrival']['iataCode'] }}</h4>
+                                            <h6 class="text-muted fw-light mt-1 mb-0 text-center" id="location">{{ codeTranslator[entry['flightOffers'][0]['itineraries'][0]['segments'][i]['arrival']['iataCode']] }}</h6>
+                                        </div>
                                     </div>
-                                </div>
                                 {% endfor %}
                             </div>
                         </div>
@@ -123,6 +133,12 @@
             sortBtn.click();
             sortBtn.click();
             sortBtn.click();
+
+            time = document.querySelectorAll('#time');
+
+            for (let i = 0; i < time.length; i++){
+                time[i].innerHTML = time[i].innerHTML.substring(11, 16);
+            }
         });
     </script>
 {% endblock %}
