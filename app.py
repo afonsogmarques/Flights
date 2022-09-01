@@ -34,8 +34,6 @@ with sqlite3.connect('airports.db', check_same_thread=False) as con:
         if None in airport_codes:
             airport_codes.remove(None)      
 
-    cursor.close()
-
     countries = []
 
     cursor2 = con.cursor()
@@ -53,31 +51,23 @@ with sqlite3.connect('airports.db', check_same_thread=False) as con:
         cursor3.execute('SELECT COUNT(*) FROM airports3 WHERE countryName = ?', (country,))
         count = cursor3.fetchone()
         airport_count.update({country: count[0]})
-    
-    airport_list = {}
 
     cursor4 = con.cursor()
     cursor4.execute('SELECT countryName, name FROM airports3 ORDER BY countryName')
     result_set = cursor4.fetchall()
 
     for i, country in enumerate(countries):
-        print(country[0])
         for row in result_set:
             if row[0] == country[0]:
                 countries[i].append(row[1])
-
-    for country in countries:
-        print(country)
-
-    print()
-    print(airport_count)
 
     for name in countries:
         if None in countries:
             countries.remove(None)
 
-
-    cursor2.close()
+    cursor5 = con.cursor()
+    cursor5.execute('SELECT code, name FROM airports')
+    codeTranslator = dict(cursor5.fetchall())
     
     # for index, code in enumerate(airport_codes):
     #     try:
@@ -105,35 +95,25 @@ def index():
         response = []
 
         for index, code in enumerate(airport_codes):
-            if index == 10:
-                break
+            # if index == 15:
+            #     break
             try:
-                airport2 = amadeus.reference_data.locations.get(keyword=code, subType="AIRPORT,CITY")
-                
-                if len(airport2.data) == 0:
-                    continue
+                flights = amadeus.shopping.flight_offers_search.get(
+                    originLocationCode=code,
+                    destinationLocationCode=iataCode,
+                    departureDate=date,
+                    adults='1',
+                    max='4'
+                ).data
 
-                else:
-                    try:
-                        flights = amadeus.shopping.flight_offers_search.get(
-                            originLocationCode=airport2.data[0]["iataCode"],
-                            destinationLocationCode=iataCode,
-                            departureDate=date,
-                            adults='1',
-                            max='1'
-                        ).data
+                for entry in flights:
+                    fetchedData = amadeus.shopping.flight_offers.pricing.post(entry).data
+                    response.append(fetchedData)
 
-                        for entry in flights:
-                            fetchedData = amadeus.shopping.flight_offers.pricing.post(entry).data
-                            response.append(fetchedData)
-
-                    except ResponseError as error:
-                        print(f"{index}. {error}")
-                    
             except ResponseError as error:
                 print(f"{index}. {error}")
 
-        return render_template('results.html', date=date, destination=destination, response=response)
+        return render_template('results.html', date=date, destination=destination, response=response, codeTranslator=codeTranslator)
 
     else:
         return render_template('index.html', countries=countries, airport_count=airport_count)

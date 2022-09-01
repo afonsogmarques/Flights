@@ -21,3 +21,19 @@
 #results .dropdown-menu {
     border-radius: 1rem;
 }
+
+#location {
+    max-width: 157px;
+}
+
+#direct {
+    color: chartreuse;
+}
+
+#one-stop {
+    color: gold;
+}
+
+#two-stop {
+    color: #cd0000;
+}
