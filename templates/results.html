@@ -19,6 +19,7 @@
                                 <div class="d-flex justify-content-center flex-column">
                                     <p class=" text-start mb-0">From</p>
                                     <h3>{{ entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['iataCode'] }}</h3>
+                                    <h6>{{ codeTranslator[entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['iataCode']] }}</h6>
                                 </div>
                                 <div class="d-flex justify-content-center flex-column">
                                     <p class=" text-start mb-0">Departure</p>
@@ -43,6 +44,7 @@
                                 <div class="d-flex justify-content-center flex-column">
                                     <p class=" text-start mb-0">To</p>
                                     <h3>{{ entry['flightOffers'][0]['itineraries'][0]['segments'][(entry['flightOffers'][0]['itineraries'][0]['segments']|length) - 1]['arrival']['iataCode'] }}</h3>
+                                    <h6>{{ codeTranslator[entry['flightOffers'][0]['itineraries'][0]['segments'][(entry['flightOffers'][0]['itineraries'][0]['segments']|length) - 1]['arrival']['iataCode']] }}</h6>
                                 </div>
                                 <div class="d-flex align-items-center">
                                     <h3 class="mb-0"  id="price">&euro;{{ entry['flightOffers'][0]['price']['grandTotal'] }}</h3>
