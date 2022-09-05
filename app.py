@@ -68,17 +68,6 @@ with sqlite3.connect('airports.db', check_same_thread=False) as con:
     cursor5 = con.cursor()
     cursor5.execute('SELECT code, name FROM airports')
     codeTranslator = dict(cursor5.fetchall())
-    
-    # for index, code in enumerate(airport_codes):
-    #     try:
-    #         airport = amadeus.reference_data.locations.get(keyword=code, subType="AIRPORT")
-    #         if len(airport.data) == 0:
-    #             continue
-    #         else: 
-    #             print(f"{index}. {code}")
-    #             cursor.execute('INSERT OR IGNORE INTO amadeus_airports4 SELECT * FROM airports WHERE code = ?', (code,))
-    #     except ResponseError as error:
-    #         print(f"error {error}")
 
 @app.route('/', methods=['GET', 'POST'])
 def index():

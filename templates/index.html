@@ -5,7 +5,11 @@
 {% endblock %}
 
 {% block main %}
-<div class="d-flex justify-content-center align-items-center flex-column" style="height: 55vh;">
+<div id="loading" class="flex-column justify-content-center align-items-center">
+    <img src="/static/loading.gif" height="64px" width="64px" class="mb-3">
+    <p class="text-mute">Loading results.<br>This may take several minutes.</p>
+</div>
+<div id="index-content" class="justify-content-center align-items-center flex-column" style="height: 55vh;">
     <div class="mb-5">
         <h1>Where will you be flying to?</h1>
     </div>
@@ -31,11 +35,20 @@
                     <input class="form-control date" type="date" name="date">
                 </div>
                 <div class="d-flex align-items-end ps-5">
-                    <input class="form-control btn btn-primary" type="submit" value="Search">
+                    <input class="form-control btn btn-primary" type="submit" value="Search" onclick="loading();">
                 </div>
             </div>
             </form>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+    function loading(){
+        document.querySelectorAll('#loading')[0].style.display = 'flex';
+        document.querySelectorAll('#index-content')[0].style.display = 'none';
+    }
+</script>
 {% endblock %}

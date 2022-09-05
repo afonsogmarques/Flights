@@ -37,3 +37,15 @@
 #two-stop {
     color: #cd0000;
 }
+
+#index-content {
+    display: flex;
+}
+
+div#loading {
+    display: none;
+    height: calc(95vh - 3rem - 66px);
+    width: 100%;
+    margin-top: -3rem;
+    cursor: wait;
+}
