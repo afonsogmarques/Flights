@@ -1,10 +1,14 @@
 import os
 import json
 import sqlite3
+
 from aiosqlite import connect
 from flask import Flask, redirect, render_template, request
 from amadeus import Client, ResponseError, Location
 from dotenv import load_dotenv
+from helpers import matchAirline
+
+from helpers import matchAirline
 
 app = Flask(__name__)
 
@@ -13,12 +17,15 @@ app = Flask(__name__)
 
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
+app.jinja_env.filters["matchAirline"] = matchAirline
+
 load_dotenv('dotenv.env')
 
 amadeus = Client(
     client_id=os.getenv('CLIENT_ID'),
     client_secret=os.getenv('CLIENT_SECRET')
 )
+
 
 with sqlite3.connect('airports.db', check_same_thread=False) as con:
     cursor = con.cursor()
