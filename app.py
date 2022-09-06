@@ -1,12 +1,13 @@
 import os
 import json
 import sqlite3
+import datetime
 
 from aiosqlite import connect
 from flask import Flask, redirect, render_template, request
 from amadeus import Client, ResponseError, Location
 from dotenv import load_dotenv
-from helpers import matchAirline
+from helpers import matchAirline, apology
 
 from helpers import matchAirline
 
@@ -26,6 +27,8 @@ amadeus = Client(
     client_secret=os.getenv('CLIENT_SECRET')
 )
 
+print(datetime.datetime.strptime("2021-02-25", "%Y-%m-%d").date())
+print(datetime.datetime.today().date())
 
 with sqlite3.connect('airports.db', check_same_thread=False) as con:
     cursor = con.cursor()
@@ -82,6 +85,19 @@ def index():
     if request.method == 'POST':
         destination = request.form.get('destination')
         date = request.form.get('date')
+
+        if not destination:
+            return apology('Please provide a destination!')
+
+        try:
+            datetime.datetime.strptime(date, "%Y-%m-%d")
+        except ValueError:
+            return apology('Invalid date format', 403)
+
+        d1 = datetime.datetime.strptime(date, "%Y-%m-%d").date()
+        now = datetime.datetime.today().date()
+        if d1 < now:
+            return apology('Date cannot be in the past', 403)
 
         with sqlite3.connect('airports.db', check_same_thread=False) as con:
             cursor = con.cursor()
