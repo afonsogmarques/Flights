@@ -88,6 +88,8 @@ def index():
 
         if not destination:
             return apology('Please provide a destination!')
+        elif not date:
+            return apology('Please provide a date!')
 
         try:
             datetime.datetime.strptime(date, "%Y-%m-%d")
@@ -96,8 +98,11 @@ def index():
 
         d1 = datetime.datetime.strptime(date, "%Y-%m-%d").date()
         now = datetime.datetime.today().date()
+
         if d1 < now:
             return apology('Date cannot be in the past', 403)
+        elif d1 > datetime.datetime(2023, 7, 31).date():
+            return apology('Date must not be later than 2023-7-31')
 
         with sqlite3.connect('airports.db', check_same_thread=False) as con:
             cursor = con.cursor()
