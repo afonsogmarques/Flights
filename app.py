@@ -7,7 +7,7 @@ from aiosqlite import connect
 from flask import Flask, redirect, render_template, request
 from amadeus import Client, ResponseError, Location
 from dotenv import load_dotenv
-from helpers import matchAirline, apology
+from helpers import matchAirline, apology, add_years
 
 from helpers import matchAirline
 
@@ -27,8 +27,7 @@ amadeus = Client(
     client_secret=os.getenv('CLIENT_SECRET')
 )
 
-print(datetime.datetime.strptime("2021-02-25", "%Y-%m-%d").date())
-print(datetime.datetime.today().date())
+print(add_years(datetime.datetime.strptime('2022-09-07', "%Y-%m-%d").date(), 1))
 
 with sqlite3.connect('airports.db', check_same_thread=False) as con:
     cursor = con.cursor()
@@ -101,8 +100,8 @@ def index():
 
         if d1 < now:
             return apology('Date cannot be in the past', 403)
-        elif d1 > datetime.datetime(2023, 7, 31).date():
-            return apology('Date must not be later than 2023-7-31')
+        elif d1 > add_years(now, 1):
+            return apology('Latest possible travel date is one year from today')
 
         with sqlite3.connect('airports.db', check_same_thread=False) as con:
             cursor = con.cursor()
