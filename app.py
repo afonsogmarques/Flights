@@ -13,8 +13,8 @@ from helpers import matchAirline
 
 app = Flask(__name__)
 
-# if __name__ == '__main__':
-#     app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
 
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
@@ -26,8 +26,6 @@ amadeus = Client(
     client_id=os.getenv('CLIENT_ID'),
     client_secret=os.getenv('CLIENT_SECRET')
 )
-
-print(add_years(datetime.datetime.strptime('2022-09-07', "%Y-%m-%d").date(), 1))
 
 with sqlite3.connect('airports.db', check_same_thread=False) as con:
     cursor = con.cursor()
@@ -86,22 +84,22 @@ def index():
         date = request.form.get('date')
 
         if not destination:
-            return apology('Please provide a destination!')
+            return apology('Please select a destination!')
         elif not date:
-            return apology('Please provide a date!')
+            return apology('Please select a date!')
 
         try:
             datetime.datetime.strptime(date, "%Y-%m-%d")
         except ValueError:
-            return apology('Invalid date format', 403)
+            return apology('Invalid date format')
 
         d1 = datetime.datetime.strptime(date, "%Y-%m-%d").date()
         now = datetime.datetime.today().date()
 
         if d1 < now:
-            return apology('Date cannot be in the past', 403)
+            return apology('Date cannot be in the past!')
         elif d1 > add_years(now, 1):
-            return apology('Latest possible travel date is one year from today')
+            return apology('Latest possible travel date is one year from today!')
 
         with sqlite3.connect('airports.db', check_same_thread=False) as con:
             cursor = con.cursor()
@@ -127,7 +125,7 @@ def index():
                     response.append(fetchedData)
 
             except ResponseError as error:
-                print(f"{index}. {error}")
+                print(error)
 
         return render_template('results.html', date=date, destination=destination, response=response, codeTranslator=codeTranslator)
 

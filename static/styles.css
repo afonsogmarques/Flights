@@ -1,3 +1,8 @@
+main {
+    min-height: max-content;
+    height: 89vh!important;
+}
+
 .dropdown a {
     text-decoration: none;
     color: initial;
@@ -40,6 +45,7 @@
 
 #index-content {
     display: flex;
+    height: 80vh;
 }
 
 div#loading {
@@ -48,4 +54,13 @@ div#loading {
     width: 100%;
     margin-top: -3rem;
     cursor: wait;
+}
+
+#apology {
+    height: 80vh;
+}
+
+#apology img {
+    min-width: 333px;
+    opacity: 0.85;
 }

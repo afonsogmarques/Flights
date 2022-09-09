@@ -6,12 +6,12 @@
 
 {% block main %}
 <div class="d-flex justify-content-center align-items-center flex-column">
-    <h1 class="mb-3">Flights to {{ destination }}</h1>
+    <h1 class="mb-3 mt-5">Flights to {{ destination }}</h1>
     <h5 class="text-muted mb-5 w-75">{{ date }}</h5>
-    <div class="d-flex justify-content-center w-75" id="results">
-        <div class="w-75 d-flex flex-column">
+    <div class="d-flex justify-content-center w-100 mb-5 mt-5" id="results">
+        <div class="w-100 d-flex flex-column">
             <button class="btn btn-secondary align-self-end mb-3 visually-hidden" id="sort"></button>
-            <div class="dropdown">
+            <div class="dropdown d-flex flex-column" style="gap: 20px;">
                 {% for entry in response %}
                     <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="card bg-primary bg-gradient text-white rounded-4">

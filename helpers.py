@@ -18,23 +18,14 @@ def matchAirline(airline_code):
     except ResponseError:
         return airline_code
 
-def apology(message, code=400):
+def apology(message):
     """Render message as an apology to user."""
-    def escape(s):
-        """
-        Escape special characters.
-
-        https://github.com/jacebrowning/memegen#special-characters
-        """
-        for old, new in [("-", "--"), (" ", "-"), ("_", "__"), ("?", "~q"),
-                         ("%", "~p"), ("#", "~h"), ("/", "~s"), ("\"", "''")]:
-            s = s.replace(old, new)
-        return s
-    return render_template("apology.html", top=code, bottom=escape(message)), code
+    return render_template("apology.html", message=message)
 
 
 def add_years(d, years):
     # By Gareth Rees in https://stackoverflow.com/questions/15741618/add-one-year-in-current-date-python
+    
     """Return a date that's `years` years after the date (or datetime)
     object `d`. Return the same calendar date (month and day) in the
     destination year, if it exists, otherwise use the following day
