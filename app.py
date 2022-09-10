@@ -4,11 +4,12 @@ import sqlite3
 import datetime
 
 from aiosqlite import connect
-from flask import Flask, redirect, render_template, request
+from flask import Flask, redirect, render_template, request, session
 from amadeus import Client, ResponseError, Location
 from dotenv import load_dotenv
 from helpers import matchAirline, apology, add_years
-
+from flask_session import Session
+from werkzeug.security import check_password_hash, generate_password_hash
 from helpers import matchAirline
 
 app = Flask(__name__)
@@ -17,6 +18,19 @@ if __name__ == '__main__':
     app.run(debug=True)
 
 app.config["TEMPLATES_AUTO_RELOAD"] = True
+
+# Configure session to use filesystem (instead of signed cookies)
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
+
+@app.after_request
+def after_request(response):
+    """Ensure responses aren't cached"""
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Expires"] = 0
+    response.headers["Pragma"] = "no-cache"
+    return response
 
 app.jinja_env.filters["matchAirline"] = matchAirline
 
@@ -76,6 +90,7 @@ with sqlite3.connect('airports.db', check_same_thread=False) as con:
     cursor5.execute('SELECT code, name FROM airports')
     codeTranslator = dict(cursor5.fetchall())
 
+# HOMEPAGE
 @app.route('/', methods=['GET', 'POST'])
 def index():
 
@@ -131,3 +146,36 @@ def index():
 
     else:
         return render_template('index.html', countries=countries, airport_count=airport_count)
+
+
+# REGISTER
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    with sqlite3.connect('airports.db', check_same_thread=False) as con:
+        cursor = con.cursor()
+        users = cursor.execute('SELECT username FROM users')
+
+        if request.method == 'POST':
+            username = request.form.get('username')
+            if not username:
+                return apology('Please provide a username!')
+
+            password = request.form.get('password')
+            if not password:
+                return apology('Please provide a password!')
+
+            confirmation = request.form.get('confirmation')
+            if not confirmation or confirmation != password:
+                return apology("Passwords don't match!")
+
+            for user in users:
+                if username == user:
+                    return apology('Username is already in use!')
+            
+            sql = "INSERT INTO users (username, hash) VALUES (?, ?)"
+            values = username, generate_password_hash(password)
+            cursor.execute(sql, values)
+
+            return redirect('/')
+        else:
+            return render_template('register.html') 

@@ -2,8 +2,8 @@
     position: fixed;
     top: 30vh;
     left: 35vw;
-    opacity: 0.6;
-    width: 300px;
+    opacity: 0.4;
+    width: 500px;
     z-index: -999;
 }
 
@@ -21,22 +21,22 @@
     top: 70vh;
     left: 22vw;
     opacity: 0.6;
-    width: 300px;
+    width: 100px;
     z-index: -999;
 }
 
 #clouds4 {
     position: fixed;
     top: 15vh;
-    left: 65vw;
+    left: 75vw;
     opacity: 0.6;
-    width: 300px;
+    width: 100px;
     z-index: -999;
 }
 
 #clouds5 {
     position: fixed;
-    top: 80vh;
+    top: 70vh;
     left: 75vw;
     opacity: 0.6;
     width: 300px;
@@ -90,7 +90,7 @@ main {
 
 #index-content {
     display: flex;
-    height: 80vh;
+    height: 77vh;
 }
 
 div#loading {
@@ -102,7 +102,7 @@ div#loading {
 }
 
 #apology {
-    height: 80vh;
+    height: 77vh;
 }
 
 #apology img {
