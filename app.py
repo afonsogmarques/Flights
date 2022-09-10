@@ -14,8 +14,8 @@ from helpers import matchAirline
 
 app = Flask(__name__)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     app.run(debug=True)
 
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
@@ -178,4 +178,42 @@ def register():
 
             return redirect('/')
         else:
-            return render_template('register.html') 
+            return render_template('register.html')
+            
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    session.clear()
+
+    if request.method == 'POST':
+        
+        if not request.form.get('username'):
+            return apology('Must provide username!')
+
+        if not request.form.get('password'):
+            return apology('Must provide password!')
+
+        with sqlite3.connect('airports.db', check_same_thread=False) as con:
+            cursor = con.cursor()
+            users = cursor.execute('SELECT * FROM users WHERE username = ?', (request.form.get('username'),)).fetchall()
+
+        if len(users) != 1 or not check_password_hash(users[0][2], request.form.get("password")):
+            return apology("Invalid username and/or password!")
+        
+        session["user_id"] = users[0][0]
+
+        return redirect("/")
+
+    else:
+        return render_template("login.html")
+
+
+@app.route("/logout")
+def logout():
+    """Log user out"""
+
+    # Forget any user_id
+    session.clear()
+
+    # Redirect user to login form
+    return redirect("/")
