@@ -88,8 +88,7 @@ main {
     color: #cd0000;
 }
 
-#index-content {
-    display: flex;
+#main-content {
     height: 77vh;
 }
 
@@ -98,7 +97,6 @@ div#loading {
     height: calc(95vh - 3rem - 66px);
     width: 100%;
     margin-top: -3rem;
-    cursor: wait;
 }
 
 #apology {

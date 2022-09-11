@@ -49,6 +49,11 @@
                                 <div class="d-flex align-items-center">
                                     <h3 class="mb-0"  id="price">&euro;{{ entry['flightOffers'][0]['price']['grandTotal'] }}</h3>
                                 </div>
+                                <form method="post" action="/results">
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <button class="btn btn-secondary btn-success" type="submit">Save</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </a>

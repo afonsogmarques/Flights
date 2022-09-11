@@ -1,2 +1,5 @@
 # ignore environment variables
 dotenv.env
+
+#ignore flask_session
+/*_session/

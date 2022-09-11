@@ -7,10 +7,9 @@ from aiosqlite import connect
 from flask import Flask, redirect, render_template, request, session
 from amadeus import Client, ResponseError, Location
 from dotenv import load_dotenv
-from helpers import matchAirline, apology, add_years
+from helpers import matchAirline, apology, add_years, login_required
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
-from helpers import matchAirline
 
 app = Flask(__name__)
 
@@ -124,7 +123,7 @@ def index():
         response = []
 
         for index, code in enumerate(airport_codes):
-            if index == 15:
+            if index == 10:
                 break
             try:
                 flights = amadeus.shopping.flight_offers_search.get(
@@ -132,7 +131,7 @@ def index():
                     destinationLocationCode=iataCode,
                     departureDate=date,
                     adults='1',
-                    max='2'
+                    max='1'
                 ).data
 
                 for entry in flights:
@@ -179,7 +178,7 @@ def register():
             return redirect('/')
         else:
             return render_template('register.html')
-            
+
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -209,6 +208,7 @@ def login():
 
 
 @app.route("/logout")
+@login_required
 def logout():
     """Log user out"""
 
@@ -217,3 +217,8 @@ def logout():
 
     # Redirect user to login form
     return redirect("/")
+
+@app.route("/favorites")
+@login_required
+def favorites():
+    return render_template('favorites.html')

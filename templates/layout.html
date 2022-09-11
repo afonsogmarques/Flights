@@ -23,7 +23,7 @@
         <img id="clouds4" src="/static/clouds.png" width="200px;">
         <img id="clouds5" src="/static/clouds.png" width="200px;">
         <nav class="bg-light border navbar navbar-expand-md navbar-light">
-            <div class="container-fluid">
+            <div class="container-fluid ps-4">
                 <a class="navbar-brand" href="/"><span class="green">i</span><span class="blue">Flights</span></a>
                 <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
                     <span class="navbar-toggler-icon"></span>
@@ -32,16 +32,17 @@
                     {% if session["user_id"] %}
                         <ul class="navbar-nav me-auto">
                             <li class="nav-item"><a class="nav-link" href="/">Search</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/buy">Favorites</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/favorites">Favorites</a></li>
                         </ul>
-                        <ul class="navbar-nav ms-auto mt-2">
+                        <ul class="navbar-nav ms-auto mt-2 pe-3">
                             <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
                         </ul>
                     {% else %}
                         <ul class="navbar-nav me-auto">
                             <li class="nav-item"><a class="nav-link" href="/">Search</a></li>
                         </ul>
-                        <ul class="navbar-nav ms-auto mt-2">
+                        <ul class="navbar-nav ms-auto mt-2 pe-3">
+                            <li class="nav-item"><a class="btn btn-primary me-4" href="/register">Register</a></li>
                             <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
                         </ul>
                     {% endif %}
