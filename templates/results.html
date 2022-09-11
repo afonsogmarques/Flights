@@ -49,9 +49,9 @@
                                 <div class="d-flex align-items-center">
                                     <h3 class="mb-0"  id="price">&euro;{{ entry['flightOffers'][0]['price']['grandTotal'] }}</h3>
                                 </div>
-                                <form method="post" action="/results">
+                                <form class="d-flex justify-content-center align-items-center" method="post" action="/results">
                                     <div class="d-flex justify-content-center align-items-center">
-                                        <button class="btn btn-secondary btn-success" type="submit">Save</button>
+                                        <button id="save" class="btn btn-secondary btn-success" type="submit">Save</button>
                                     </div>
                                 </form>
                             </div>
@@ -144,11 +144,20 @@
             sortBtn.click();
             sortBtn.click();
 
+            // Show time in hours and minutes only
             time = document.querySelectorAll('#time');
 
             for (let i = 0; i < time.length; i++){
                 time[i].innerHTML = time[i].innerHTML.substring(11, 16);
             }
+
+            document.getElementById('save').addEventListener('click', function() {
+                var hey = 'crazy';
+                var xhttp = new XMLHttpRequest();
+                xhttp.open("GET", "/favorites/" + hey);
+                xhttp.send();
+                location.replace('/favorites');
+            });
         });
     </script>
 {% endblock %}
