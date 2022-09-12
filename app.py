@@ -217,11 +217,7 @@ def logout():
 
     # Redirect user to login form
     return redirect("/")
-
-@app.route("/getmethod/<jsdata>")
-def get_javascript_data(jsdata):
-    return render_template("favorites.html", jsdata=jsdata)
-
+    
 
 @app.route("/favorites")
 @login_required

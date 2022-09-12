@@ -76,15 +76,15 @@ main {
     max-width: 157px;
 }
 
-#direct {
+.direct {
     color: chartreuse;
 }
 
-#one-stop {
+.one-stop {
     color: gold;
 }
 
-#two-stop {
+.two-stop {
     color: #cd0000;
 }
 
