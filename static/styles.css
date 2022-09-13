@@ -72,7 +72,7 @@ main {
     border-radius: 1rem;
 }
 
-#location {
+#dropdown-departure-name, #dropdown-leg-destination-name {
     max-width: 157px;
 }
 
