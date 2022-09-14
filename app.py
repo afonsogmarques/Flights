@@ -7,7 +7,7 @@ from aiosqlite import connect
 from flask import Flask, redirect, render_template, request, session
 from amadeus import Client, ResponseError, Location
 from dotenv import load_dotenv
-from helpers import matchAirline, apology, add_years, login_required
+from helpers import convert_to_list, matchAirline, apology, add_years, login_required
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -85,29 +85,29 @@ with sqlite3.connect('airports.db', check_same_thread=False) as con:
         if None in countries:
             countries.remove(None)
 
-    cursor5 = con.cursor()
-    cursor5.execute('SELECT code, name FROM airports')
-    codeTranslator = dict(cursor5.fetchall())
-
 # HOMEPAGE
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    with sqlite3.connect('airports.db', check_same_thread=False) as con:
+        cursor5 = con.cursor()
+        cursor5.execute('SELECT code, name FROM airports')
+        session["codeTranslator"] = dict(cursor5.fetchall())
 
     if request.method == 'POST':
-        destination = request.form.get('destination')
-        date = request.form.get('date')
+        session["destination"] = request.form.get('destination')
+        session["date"] = request.form.get('date')
 
-        if not destination:
+        if not session["destination"]:
             return apology('Please select a destination!')
-        elif not date:
+        elif not session["date"]:
             return apology('Please select a date!')
 
         try:
-            datetime.datetime.strptime(date, "%Y-%m-%d")
+            datetime.datetime.strptime(session["date"], "%Y-%m-%d")
         except ValueError:
             return apology('Invalid date format')
 
-        d1 = datetime.datetime.strptime(date, "%Y-%m-%d").date()
+        d1 = datetime.datetime.strptime(session["date"], "%Y-%m-%d").date()
         now = datetime.datetime.today().date()
 
         if d1 < now:
@@ -117,10 +117,10 @@ def index():
 
         with sqlite3.connect('airports.db', check_same_thread=False) as con:
             cursor = con.cursor()
-            cursor.execute('SELECT code FROM airports3 WHERE name = ?', (destination,))
+            cursor.execute('SELECT code FROM airports3 WHERE name = ?', (session["destination"],))
             iataCode = cursor.fetchone()
         
-        response = []
+        session["response"] = []
 
         for index, code in enumerate(airport_codes):
             if index == 10:
@@ -129,19 +129,19 @@ def index():
                 flights = amadeus.shopping.flight_offers_search.get(
                     originLocationCode=code,
                     destinationLocationCode=iataCode,
-                    departureDate=date,
+                    departureDate=session["date"],
                     adults='1',
                     max='1'
                 ).data
 
                 for entry in flights:
                     fetchedData = amadeus.shopping.flight_offers.pricing.post(entry).data
-                    response.append(fetchedData)
+                    session["response"].append(fetchedData)
 
             except ResponseError as error:
                 print(error)
 
-        return render_template('results.html', date=date, destination=destination, response=response, codeTranslator=codeTranslator)
+        return redirect('/results')
 
     else:
         return render_template('index.html', countries=countries, airport_count=airport_count)
@@ -222,4 +222,32 @@ def logout():
 @app.route("/favorites")
 @login_required
 def favorites():
-    return render_template('favorites.html')
+        return render_template('favorites.html')
+
+
+@app.route("/results", methods=['GET', 'POST'])
+def results():
+    with sqlite3.connect('airports.db', check_same_thread=False) as con:
+        if request.method == 'POST':
+            departure_code = request.form.get('departure-code')
+            departure_name = request.form.get('departure-name')
+            departure_time = request.form.get('departure-time')
+            itinerary_type = request.form.get('itinerary-type')
+            arrival_time = request.form.get('arrival-time')
+            arrival_code = request.form.get('arrival-code')
+            arrival_name = request.form.get('arrival-name')
+            total_price = request.form.get('price')
+            carrier_name = request.form.get('dropdown-carrier-name')
+            leg_departure_time = request.form.get('dropdown-leg-departure-time')
+            leg_destination_code = request.form.get('dropdown-leg-destination-code')
+            leg_destination_name = request.form.get('dropdown-leg-destination-name')
+
+            # cursor = con.cursor()
+            # sql = 'INSERT INTO favorites (departureCode, departureName, departureTime, itineraryType, arrivalTime, arrivalCode, arrivalName, totalPrice, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);'
+            # values = departure_code, departure_name, departure_time, itinerary_type, arrival_time, arrival_code, arrival_name, total_price, session["user_id"]
+            # cursor.execute(sql, values)
+            
+            return convert_to_list(carrier_name)
+
+        else:
+            return render_template('results.html', date=session.get("date", None), destination=session.get("destination", None), response=session.get("response", None), codeTranslator=session.get("codeTranslator", None))

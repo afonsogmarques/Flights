@@ -13,7 +13,7 @@
             <button class="btn btn-secondary align-self-end mb-3 visually-hidden" id="sort"></button>
             <div id="dropdown" class="dropdown d-flex flex-column" style="gap: 20px;">
                 {% for entry in response %}
-                    <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="dropdown-toggle" role="button" aria-expanded="false">
                         <div class="card bg-primary bg-gradient text-white rounded-4">
                             <div class="d-flex flex-row justify-content-around p-2 pt-4 pb-4">
                                 <div class="d-flex justify-content-center flex-column">
@@ -70,7 +70,7 @@
                                 </form>
                             </div>
                         </div>
-                    </a>
+                    </div>
                     <div id="dropdown-menu" class="dropdown-menu rounded-4 pt-3 pb-3">
                         <div class="d-flex align-items-center flex-column">
                             <div class="d-flex flex-row justify-content-center align-items-center w-100 ps-5 pe-5">
