@@ -66,7 +66,7 @@
                                                 <input id="input-dropdown-leg-destination-code" type="text" name="dropdown-leg-destination-code">
                                                 <input id="input-dropdown-leg-destination-name" type="text" name="dropdown-leg-destination-name">
                                             </div>
-                                            <button id="save" class="btn btn-secondary btn-success" onclick="post()">Save</button>
+                                            <button id="save" class="btn btn-secondary btn-success">Save</button>
                                         </div>
                                     </form>
                                 {% endif %}
@@ -174,97 +174,110 @@
             }
 
             // GET FLIGHT INFO FROM FRONTEND TO SAVE IT IN SQL DB
-            // var saveBtns = document.querySelectorAll('#save');
+            var saveBtns = document.querySelectorAll('#save');
 
-            // for (let i = 0; i < saveBtns.length; i++) {
-            //     saveBtns[i].addEventListener('click', function(){
+            for (let i = 0; i < saveBtns.length; i++) {
+                saveBtns[i].addEventListener('click', function(){
 
-            //         // There's probably a better way to do this sort of data transfer without having to rewrite it in a hidden form
-            //         // but this was my workaround
-            //         var outerDiv = saveBtns[i].parentElement.parentElement.parentElement;
-            //         var departureCode = outerDiv.querySelector('#departure-code');
-            //         var departureName = outerDiv.querySelector('#departure-name');
-            //         var departureTime = outerDiv.querySelector('#departure-time');
-            //         var itineraryType = outerDiv.querySelector('#itinerary-type');
-            //         var arrivalTime = outerDiv.querySelector('#arrival-time');
-            //         var arrivalCode = outerDiv.querySelector('#arrival-code');
-            //         var arrivalName = outerDiv.querySelector('#arrival-name');
-            //         var totalPrice = outerDiv.querySelector('#price');
+                    // There's probably a better way to do this sort of data transfer without having to rewrite it in a hidden form
+                    // but this was my workaround
+                    var outerDiv = saveBtns[i].parentElement.parentElement.parentElement;
+                    var departureCode = outerDiv.querySelector('#departure-code').innerHTML;
+                    var departureName = outerDiv.querySelector('#departure-name').innerHTML;
+                    var departureTime = outerDiv.querySelector('#departure-time').innerHTML;
+                    var itineraryType = outerDiv.querySelector('#itinerary-type').innerHTML;
+                    var arrivalTime = outerDiv.querySelector('#arrival-time').innerHTML;
+                    var arrivalCode = outerDiv.querySelector('#arrival-code').innerHTML;
+                    var arrivalName = outerDiv.querySelector('#arrival-name').innerHTML;
+                    var totalPrice = outerDiv.querySelector('#price').innerHTML;
                     
-            //         var dropdown = document.querySelector("#dropdown");
-            //         var dropdownMenu = dropdown.querySelectorAll("#dropdown-menu")[i];
-            //         var dropdownCarrierName = dropdownMenu.querySelectorAll("#carrier-name");
-            //         var dropdownLegDepartureTime = dropdownMenu.querySelectorAll("#dropdown-leg-departure-time");
-            //         var dropdownLegDestinationCode = dropdownMenu.querySelectorAll("#dropdown-leg-destination-code");
-            //         var dropdownLegDestinationName = dropdownMenu.querySelectorAll("#dropdown-leg-destination-name");
+                    var dropdown = document.querySelector("#dropdown");
+                    var dropdownMenu = dropdown.querySelectorAll("#dropdown-menu")[i];
+                    var dropdownCarrierName = dropdownMenu.querySelectorAll("#carrier-name");
+                    var dropdownLegDepartureTime = dropdownMenu.querySelectorAll("#dropdown-leg-departure-time");
+                    var dropdownLegDestinationCode = dropdownMenu.querySelectorAll("#dropdown-leg-destination-code");
+                    var dropdownLegDestinationName = dropdownMenu.querySelectorAll("#dropdown-leg-destination-name");
 
-            //         var inputDepartureCode = document.querySelectorAll("#input-departure-code");
-            //         var inputDepartureName = document.querySelectorAll("#input-departure-name");
-            //         var inputDepartureTime = document.querySelectorAll("#input-departure-time");
-            //         var inputItineraryType = document.querySelectorAll("#input-itinerary-type");
-            //         var inputArrivalTime = document.querySelectorAll("#input-arrival-time");
-            //         var inputArrivalCode = document.querySelectorAll("#input-arrival-code");
-            //         var inputArrivalName = document.querySelectorAll("#input-arrival-name");
-            //         var inputTotalPrice = document.querySelectorAll("#input-price");
-            //         var inputDropdownCarrierName = document.querySelectorAll("#input-dropdown-carrier-name");
-            //         var inputDropdownLegDepartureTime = document.querySelectorAll("#input-dropdown-leg-departure-time");
-            //         var inputDropdownLegDestinationCode = document.querySelectorAll("#input-dropdown-leg-destination-code");
-            //         var inputDropdownLegDestinationName = document.querySelectorAll("#input-dropdown-leg-destination-name");
+                    // var inputDepartureCode = document.querySelectorAll("#input-departure-code");
+                    // var inputDepartureName = document.querySelectorAll("#input-departure-name");
+                    // var inputDepartureTime = document.querySelectorAll("#input-departure-time");
+                    // var inputItineraryType = document.querySelectorAll("#input-itinerary-type");
+                    // var inputArrivalTime = document.querySelectorAll("#input-arrival-time");
+                    // var inputArrivalCode = document.querySelectorAll("#input-arrival-code");
+                    // var inputArrivalName = document.querySelectorAll("#input-arrival-name");
+                    // var inputTotalPrice = document.querySelectorAll("#input-price");
+                    // var inputDropdownCarrierName = document.querySelectorAll("#input-dropdown-carrier-name");
+                    // var inputDropdownLegDepartureTime = document.querySelectorAll("#input-dropdown-leg-departure-time");
+                    // var inputDropdownLegDestinationCode = document.querySelectorAll("#input-dropdown-leg-destination-code");
+                    // var inputDropdownLegDestinationName = document.querySelectorAll("#input-dropdown-leg-destination-name");
 
-            //         inputDepartureCode[i].value = departureCode.innerHTML;
-            //         inputDepartureName[i].value = departureName.innerHTML;
-            //         inputDepartureTime[i].value = departureTime.innerHTML;
-            //         inputItineraryType[i].value = itineraryType.innerHTML;
-            //         inputArrivalTime[i].value = arrivalTime.innerHTML;
-            //         inputArrivalCode[i].value = arrivalCode.innerHTML;
-            //         inputArrivalName[i].value = arrivalName.innerHTML;
-            //         inputTotalPrice[i].value = totalPrice.innerHTML;
+                    // inputDepartureCode[i].value = departureCode.innerHTML;
+                    // inputDepartureName[i].value = departureName.innerHTML;
+                    // inputDepartureTime[i].value = departureTime.innerHTML;
+                    // inputItineraryType[i].value = itineraryType.innerHTML;
+                    // inputArrivalTime[i].value = arrivalTime.innerHTML;
+                    // inputArrivalCode[i].value = arrivalCode.innerHTML;
+                    // inputArrivalName[i].value = arrivalName.innerHTML;
+                    // inputTotalPrice[i].value = totalPrice.innerHTML;
 
-            //         for (let j = 0; j < dropdownCarrierName.length; j++) {
-            //             if (j == 0) {
-            //                 inputDropdownCarrierName[i].value += dropdownCarrierName[j].innerHTML;
-            //             }
-            //             else {
-            //                 inputDropdownCarrierName[i].value += ", " + dropdownCarrierName[j].innerHTML;
-            //             }
-            //         }
+                    // for (let j = 0; j < dropdownCarrierName.length; j++) {
+                    //     if (j == 0) {
+                    //         inputDropdownCarrierName[i].value += dropdownCarrierName[j].innerHTML;
+                    //     }
+                    //     else {
+                    //         inputDropdownCarrierName[i].value += ", " + dropdownCarrierName[j].innerHTML;
+                    //     }
+                    // }
 
-            //         for (let j = 0; j < dropdownLegDepartureTime.length; j++) {
-            //             if (j == 0) {
-            //                 inputDropdownLegDepartureTime[i].value += dropdownLegDepartureTime[j].innerHTML;
-            //             }
-            //             else {
-            //                 inputDropdownLegDepartureTime[i].value += ", " + dropdownLegDepartureTime[j].innerHTML;
-            //             }
-            //         }
+                    // for (let j = 0; j < dropdownLegDepartureTime.length; j++) {
+                    //     if (j == 0) {
+                    //         inputDropdownLegDepartureTime[i].value += dropdownLegDepartureTime[j].innerHTML;
+                    //     }
+                    //     else {
+                    //         inputDropdownLegDepartureTime[i].value += ", " + dropdownLegDepartureTime[j].innerHTML;
+                    //     }
+                    // }
 
-            //         for (let j = 0; j < dropdownLegDestinationCode.length; j++) {
-            //             if (j == 0) {
-            //                 inputDropdownLegDestinationCode[i].value += dropdownLegDestinationCode[j].innerHTML;
-            //             }
-            //             else {
-            //                 inputDropdownLegDestinationCode[i].value += ", " + dropdownLegDestinationCode[j].innerHTML;
-            //             }
-            //         }
+                    // for (let j = 0; j < dropdownLegDestinationCode.length; j++) {
+                    //     if (j == 0) {
+                    //         inputDropdownLegDestinationCode[i].value += dropdownLegDestinationCode[j].innerHTML;
+                    //     }
+                    //     else {
+                    //         inputDropdownLegDestinationCode[i].value += ", " + dropdownLegDestinationCode[j].innerHTML;
+                    //     }
+                    // }
 
-            //         for (let j = 0; j < dropdownLegDestinationName.length; j++) {
-            //             if (j == 0) {
-            //                 inputDropdownLegDestinationName[i].value += dropdownLegDestinationName[j].innerHTML;
-            //             }
-            //             else {
-            //                 inputDropdownLegDestinationName[i].value += ", " + dropdownLegDestinationName[j].innerHTML;
-            //             }
-            //         }
-            // });
-            // }
+                    // for (let j = 0; j < dropdownLegDestinationName.length; j++) {
+                    //     if (j == 0) {
+                    //         inputDropdownLegDestinationName[i].value += dropdownLegDestinationName[j].innerHTML;
+                    //     }
+                    //     else {
+                    //         inputDropdownLegDestinationName[i].value += ", " + dropdownLegDestinationName[j].innerHTML;
+                    //     }
+                    // }
+
+                    post();
+
+                    function post() {
+                        var http = new XMLHttpRequest;
+                        http.open("POST", "{{ url_for('results') }}", true);
+                        http.setRequestHeader("Content-type", "application/json");
+                        http.send(JSON.stringify(
+                            {
+                                "departureCode" : departureCode,
+                                "departureName" : departureName,
+                                "departureTime" : departureTime,
+                                "itineraryType" : itineraryType,
+                                "arrivalTime" : arrivalTime,
+                                "arrivalCode" : arrivalCode,
+                                "arrivalName" : arrivalName,
+                                "totalPrice" : totalPrice
+                            }
+                        ));
+                    }
+                });
+            }
         });
-
-        function post() {
-            var http = new XMLHttpRequest;
-            http.open("POST", "{{ url_for('results') }}", true);
-            http.setRequestHeader("Content-type", "application/json");
-            http.send(JSON.stringify({"name" : "Afonso", "age" : "24"}));
-        }
 
     </script>
 {% endblock %}

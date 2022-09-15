@@ -253,7 +253,15 @@ def results():
             #     cursor.execute(sql, carrier)
 
             data = request.get_json()
-            print(data, data["name"], data["age"])
+            print(data)
+            print(data["departureCode"])
+            print(data["departureName"])
+            print(data["departureTime"])
+            print(data["itineraryType"])
+            print(data["arrivalTime"])
+            print(data["arrivalCode"])
+            print(data["arrivalName"])
+            print(data["totalPrice"])
             return ("", 204)
 
         else:
