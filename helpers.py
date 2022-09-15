@@ -38,6 +38,8 @@ def add_years(d, years):
     except ValueError:
         return d + (date(d.year + years, 1, 1) - date(d.year, 1, 1))
 
+
+#Require Login
 def login_required(f):
     """
     Decorate routes to require login.
@@ -50,6 +52,7 @@ def login_required(f):
             return redirect("/login")
         return f(*args, **kwargs)
     return decorated_function
+
 
 def convert_to_list(string):
     converted_string = string.split(", ")
