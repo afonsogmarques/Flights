@@ -242,12 +242,17 @@ def results():
             leg_destination_code = request.form.get('dropdown-leg-destination-code')
             leg_destination_name = request.form.get('dropdown-leg-destination-name')
 
-            # cursor = con.cursor()
-            # sql = 'INSERT INTO favorites (departureCode, departureName, departureTime, itineraryType, arrivalTime, arrivalCode, arrivalName, totalPrice, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);'
-            # values = departure_code, departure_name, departure_time, itinerary_type, arrival_time, arrival_code, arrival_name, total_price, session["user_id"]
-            # cursor.execute(sql, values)
+            cursor = con.cursor()
+            sql = 'INSERT INTO favorites (departureCode, departureName, departureTime, itineraryType, arrivalTime, arrivalCode, arrivalName, totalPrice, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);'
+            values = departure_code, departure_name, departure_time, itinerary_type, arrival_time, arrival_code, arrival_name, total_price, session["user_id"]
+            return cursor.execute(sql, values)
             
-            return convert_to_list(carrier_name)
+            # carriers_list = convert_to_list(carrier_name)
+            # for i in range(len(carriers_list)):
+            #     carrier = carriers_list[i]
+            #     cursor.execute(sql, carrier)
+
+            
 
         else:
             return render_template('results.html', date=session.get("date", None), destination=session.get("destination", None), response=session.get("response", None), codeTranslator=session.get("codeTranslator", None))

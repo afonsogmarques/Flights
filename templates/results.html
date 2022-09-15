@@ -176,6 +176,9 @@
 
             for (let i = 0; i < saveBtns.length; i++) {
                 saveBtns[i].addEventListener('click', function(){
+
+                    // There's probably a better way to do this sort of data transfer without having to rewrite the same data in a hidden form
+                    // but this was my workaround
                     var outerDiv = saveBtns[i].parentElement.parentElement.parentElement;
                     var departureCode = outerDiv.querySelector('#departure-code');
                     var departureName = outerDiv.querySelector('#departure-name');
