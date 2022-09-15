@@ -229,30 +229,32 @@ def favorites():
 def results():
     with sqlite3.connect('airports.db', check_same_thread=False) as con:
         if request.method == 'POST':
-            departure_code = request.form.get('departure-code')
-            departure_name = request.form.get('departure-name')
-            departure_time = request.form.get('departure-time')
-            itinerary_type = request.form.get('itinerary-type')
-            arrival_time = request.form.get('arrival-time')
-            arrival_code = request.form.get('arrival-code')
-            arrival_name = request.form.get('arrival-name')
-            total_price = request.form.get('price')
-            carrier_name = request.form.get('dropdown-carrier-name')
-            leg_departure_time = request.form.get('dropdown-leg-departure-time')
-            leg_destination_code = request.form.get('dropdown-leg-destination-code')
-            leg_destination_name = request.form.get('dropdown-leg-destination-name')
+            # departure_code = request.form.get('departure-code')
+            # departure_name = request.form.get('departure-name')
+            # departure_time = request.form.get('departure-time')
+            # itinerary_type = request.form.get('itinerary-type')
+            # arrival_time = request.form.get('arrival-time')
+            # arrival_code = request.form.get('arrival-code')
+            # arrival_name = request.form.get('arrival-name')
+            # total_price = request.form.get('price')
+            # carrier_name = request.form.get('dropdown-carrier-name')
+            # leg_departure_time = request.form.get('dropdown-leg-departure-time')
+            # leg_destination_code = request.form.get('dropdown-leg-destination-code')
+            # leg_destination_name = request.form.get('dropdown-leg-destination-name')
 
-            cursor = con.cursor()
-            sql = 'INSERT INTO favorites (departureCode, departureName, departureTime, itineraryType, arrivalTime, arrivalCode, arrivalName, totalPrice, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);'
-            values = departure_code, departure_name, departure_time, itinerary_type, arrival_time, arrival_code, arrival_name, total_price, session["user_id"]
-            return cursor.execute(sql, values)
-            
+            # cursor = con.cursor()
+            # sql = 'INSERT INTO favorites (departureCode, departureName, departureTime, itineraryType, arrivalTime, arrivalCode, arrivalName, totalPrice, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);'
+            # values = departure_code, departure_name, departure_time, itinerary_type, arrival_time, arrival_code, arrival_name, total_price, session["user_id"]
+            # return cursor.execute(sql, values)
+
             # carriers_list = convert_to_list(carrier_name)
             # for i in range(len(carriers_list)):
             #     carrier = carriers_list[i]
             #     cursor.execute(sql, carrier)
 
-            
+            data = request.get_json()
+            print(data, data["name"], data["age"])
+            return ("", 204)
 
         else:
             return render_template('results.html', date=session.get("date", None), destination=session.get("destination", None), response=session.get("response", None), codeTranslator=session.get("codeTranslator", None))
