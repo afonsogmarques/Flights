@@ -198,6 +198,14 @@
                     var dropdownLegDestinationCode = dropdownMenu.querySelectorAll("#dropdown-leg-destination-code");
                     var dropdownLegDestinationName = dropdownMenu.querySelectorAll("#dropdown-leg-destination-name");
 
+                    var carriers = [];
+
+                    for (let j = 0; j < dropdownCarrierName.length; j++) {
+                        carriers[j] = dropdownCarrierName[j].innerHTML;
+                    }
+
+                    console.log(carriers);
+
                     // var inputDepartureCode = document.querySelectorAll("#input-departure-code");
                     // var inputDepartureName = document.querySelectorAll("#input-departure-name");
                     // var inputDepartureTime = document.querySelectorAll("#input-departure-time");
