@@ -5,7 +5,180 @@
 {% endblock %}
 
 {% block main %}
-    <div id="main-content">
-        <h1>Favorites</h1>
+    <div class="d-flex justify-content-center align-items-center flex-column">
+        <h1 class="mb-5 mt-5">Saved Flights</h1>
+        {% for entry in favorites %}
+            <div class="d-flex justify-content-center w-100 mb-3 mt-3" id="results">
+                <div class="w-100 d-flex flex-column">
+                    <button class="btn btn-secondary align-self-end mb-3 visually-hidden" id="sort"></button>
+                    <div id="dropdown" class="dropdown d-flex flex-column" style="gap: 20px;">
+                        <div class="dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="card bg-primary bg-gradient text-white rounded-4">
+                                <div class="d-flex flex-row justify-content-around p-2 pt-4 pb-4">
+                                    <div class="d-flex justify-content-center flex-column">
+                                        <p id="flight-id" class="d-none">{{ entry[0] }}</p>
+                                        <p class="text-start mb-0">From</p>
+                                        <h3 id="departure-code" class="text-start">{{ entry[1] }}</h3>
+                                        <h6 id="departure-name" class="text-start">{{ entry[2] }}</h6>
+                                    </div>
+                                    <div class="d-flex justify-content-center flex-column">
+                                        <p class=" text-start mb-0">Departure</p>
+                                        <h3 id="departure-time" class="time">{{ entry[3] }}</h3>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        {% if entry[4] == "Direct flight" %}
+                                            <h6 id="itinerary-type" class="mb-0 direct">{{ entry[4] }}</h6>
+                                        {% elif entry[4] == "1 stopover" %}
+                                            <h6 id="itinerary-type" class="mb-0 one-stop">{{ entry[4] }}</h6>
+                                        {% else %}
+                                            <h6 id="itinerary-type" class="mb-0 two-stop">{{ entry[4] }}</h6>
+                                        {% endif %}
+                                    </div>
+                                    <div class="d-flex justify-content-center flex-column">
+                                        <p class=" text-start mb-0">Arrival</p>
+                                        <h3 id="arrival-time" class="time">{{ entry[5] }}</h3>
+                                    </div>
+                                    <div class="d-flex justify-content-center flex-column">
+                                        <p class=" text-start mb-0">To</p>
+                                        <h3 id="arrival-code" class="text-start">{{ entry[6] }}</h3>
+                                        <h6 id="arrival-name" class="text-start">{{ entry[7] }}</h6>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <h3 class="mb-0"  id="price">{{ entry[8] }}</h3>
+                                    </div>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <button id="remove" class="btn btn-danger">Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="dropdown-menu" class="dropdown-menu rounded-4 pt-3 pb-3">
+                            <div class="d-flex align-items-center flex-column">
+                                <div class="d-flex flex-row justify-content-center align-items-center w-100 ps-5 pe-5">
+                                    <div class="d-flex flex-column align-items-center">
+                                        <h6 id="dropdown-departure-time" class="text-muted fw-light text-center time">{{ entry[3] }}</h6>
+                                        <h4 id="dropdown-departure-code" class="mb-0" id="departure-code">{{ entry[1] }}</h4>
+                                        <h6 id="dropdown-departure-name" class="text-muted fw-light mt-1 mb-0 text-center">{{ entry[2] }}</h6>
+                                    </div>
+                                    <div class="ms-3 me-3 w-25">
+                                        <!-- CARRIER NAME -->
+                                        <p id="carrier-name" class="text-muted text-center">{{ entry[9] }}</p>
+                                        <div class="bg-secondary" style="height: 3px;"></div>
+                                    </div>
+                                    {% if entry[4] == "2 stopovers" %}
+                                        <div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <!-- LEG DEPARTURE TIME -->
+                                                <h6 id="dropdown-leg-departure-time" class="text-muted fw-light text-center time">{{ entry[12] }}</h6>
+                                                <!-- LEG DESTINATION CODE -->
+                                                <h4 id="dropdown-leg-destination-code" class="mb-0" id="arrival-code">{{ entry[13] }}</h4>
+                                                <!-- LEG DESTINATION NAME -->
+                                                <h6 id="dropdown-leg-destination-name" class="text-muted fw-light mt-1 mb-0 text-center">{{ entry[14] }}</h6>
+                                            </div>
+                                        </div>
+                                        <div class="ms-3 me-3 w-25">
+                                            <!-- CARRIER NAME -->
+                                            <p id="carrier-name" class="text-muted text-center">{{ entry[10] }}</p>
+                                            <div class="bg-secondary" style="height: 3px;"></div>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <!-- LEG DEPARTURE TIME -->
+                                                <h6 id="dropdown-leg-departure-time" class="text-muted fw-light text-center time">{{ entry[15] }}</h6>
+                                                <!-- LEG DESTINATION CODE -->
+                                                <h4 id="dropdown-leg-destination-code" class="mb-0" id="arrival-code">{{ entry[16] }}</h4>
+                                                <!-- LEG DESTINATION NAME -->
+                                                <h6 id="dropdown-leg-destination-name" class="text-muted fw-light mt-1 mb-0 text-center">{{ entry[17] }}</h6>
+                                            </div>
+                                        </div>
+                                        <div class="ms-3 me-3 w-25">
+                                            <!-- CARRIER NAME -->
+                                            <p id="carrier-name" class="text-muted text-center">{{ entry[11] }}</p>
+                                            <div class="bg-secondary" style="height: 3px;"></div>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <!-- ARRIVAL TIME -->
+                                                <h6 id="dropdown-leg-arrival-time" class="text-muted fw-light text-center time">{{ entry[5] }}</h6>
+                                                <!-- FINAL DESTINATION CODE -->
+                                                <h4 id="dropdown-leg-destination-code" class="mb-0" id="arrival-code">{{ entry[6] }}</h4>
+                                                <!-- LEG DESTINATION NAME -->
+                                                <h6 id="dropdown-leg-destination-name" class="text-muted fw-light mt-1 mb-0 text-center">{{ entry[7] }}</h6>
+                                            </div>
+                                        </div>
+                                    {% elif entry[4] == "1 stopover" %}
+                                        <div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <!-- LEG DEPARTURE TIME -->
+                                                <h6 id="dropdown-leg-departure-time" class="text-muted fw-light text-center time">{{ entry[12] }}</h6>
+                                                <!-- LEG DESTINATION CODE -->
+                                                <h4 id="dropdown-leg-destination-code" class="mb-0" id="arrival-code">{{ entry[13] }}</h4>
+                                                <!-- LEG DESTINATION NAME -->
+                                                <h6 id="dropdown-leg-destination-name" class="text-muted fw-light mt-1 mb-0 text-center">{{ entry[14] }}</h6>
+                                            </div>
+                                        </div>
+                                        <div class="ms-3 me-3 w-25">
+                                            <!-- CARRIER NAME -->
+                                            <p id="carrier-name" class="text-muted text-center">{{ entry[10] }}</p>
+                                            <div class="bg-secondary" style="height: 3px;"></div>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <!-- ARRIVAL TIME -->
+                                                <h6 id="dropdown-leg-arrival-time" class="text-muted fw-light text-center time">{{ entry[5] }}</h6>
+                                                <!-- FINAL DESTINATION CODE -->
+                                                <h4 id="dropdown-leg-destination-code" class="mb-0" id="arrival-code">{{ entry[6] }}</h4>
+                                                <!-- LEG DESTINATION NAME -->
+                                                <h6 id="dropdown-leg-destination-name" class="text-muted fw-light mt-1 mb-0 text-center">{{ entry[7] }}</h6>
+                                            </div>
+                                        </div>
+                                    {% elif entry[4] == "Direct flight" %}
+                                        <div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <!-- ARRIVAL TIME -->
+                                                <h6 id="dropdown-leg-arrival-time" class="text-muted fw-light text-center time">{{ entry[5] }}</h6>
+                                                <!-- FINAL DESTINATION CODE -->
+                                                <h4 id="dropdown-leg-destination-code" class="mb-0" id="arrival-code">{{ entry[6] }}</h4>
+                                                <!-- LEG DESTINATION NAME -->
+                                                <h6 id="dropdown-leg-destination-name" class="text-muted fw-light mt-1 mb-0 text-center">{{ entry[7] }}</h6>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            var removeBtn = document.querySelectorAll("#remove")
+
+            for (let i = 0; i < removeBtn.length; i++) {
+                removeBtn[i].addEventListener("click", function() {
+                    var parentDiv = removeBtn[i].parentElement.parentElement;
+                    var flightID = parentDiv.querySelector("#flight-id").innerHTML;
+                    console.log(flightID.innerHTML);
+                    var http = new XMLHttpRequest;
+                    http.open('POST', "{{ url_for('favorites') }}", true);
+                    http.setRequestHeader("Content-type", "application/json");
+                    http.send(JSON.stringify(
+                        {
+                            "id" : flightID
+                        }
+                    ));
+
+                    setTimeout(() => {
+                        window.location.reload(true);
+                    }, 200);
+                });
+            }
+        });
+    </script>
 {% endblock %}

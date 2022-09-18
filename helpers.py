@@ -52,8 +52,3 @@ def login_required(f):
             return redirect("/login")
         return f(*args, **kwargs)
     return decorated_function
-
-
-def convert_to_list(string):
-    converted_string = string.split(", ")
-    return converted_string

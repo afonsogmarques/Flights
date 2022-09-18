@@ -50,25 +50,9 @@
                                     <h3 class="mb-0"  id="price">&euro;{{ entry['flightOffers'][0]['price']['grandTotal'] }}</h3>
                                 </div>
                                 {% if session["user_id"] %}
-                                    <form id="form-data" class="d-flex justify-content-center align-items-center" method="post" action="/results">
-                                        <div class="d-flex flex-column justify-content-center align-items-center">
-                                            <div class="d-none">
-                                                <input id="input-departure-code" type="text" name="departure-code">
-                                                <input id="input-departure-name" type="text" name="departure-name">
-                                                <input id="input-departure-time" type="text" name="departure-time">
-                                                <input id="input-itinerary-type" type="text" name="itinerary-type">
-                                                <input id="input-arrival-time" type="text" name="arrival-time">
-                                                <input id="input-arrival-code" type="text" name="arrival-code">
-                                                <input id="input-arrival-name" type="text" name="arrival-name">
-                                                <input id="input-price" type="text" name="price">
-                                                <input id="input-dropdown-carrier-name" type="text" name="dropdown-carrier-name">
-                                                <input id="input-dropdown-leg-departure-time" type="text" name="dropdown-leg-departure-time">
-                                                <input id="input-dropdown-leg-destination-code" type="text" name="dropdown-leg-destination-code">
-                                                <input id="input-dropdown-leg-destination-name" type="text" name="dropdown-leg-destination-name">
-                                            </div>
-                                            <button id="save" class="btn btn-secondary btn-success">Save</button>
-                                        </div>
-                                    </form>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <button id="save" class="btn btn-success">Save</button>
+                                    </div>
                                 {% endif %}
                             </div>
                         </div>
@@ -179,8 +163,6 @@
             for (let i = 0; i < saveBtns.length; i++) {
                 saveBtns[i].addEventListener('click', function(){
 
-                    // There's probably a better way to do this sort of data transfer without having to rewrite it in a hidden form
-                    // but this was my workaround
                     var outerDiv = saveBtns[i].parentElement.parentElement.parentElement;
                     var departureCode = outerDiv.querySelector('#departure-code').innerHTML;
                     var departureName = outerDiv.querySelector('#departure-name').innerHTML;
@@ -199,70 +181,30 @@
                     var dropdownLegDestinationName = dropdownMenu.querySelectorAll("#dropdown-leg-destination-name");
 
                     var carriers = [];
-
+                    
                     for (let j = 0; j < dropdownCarrierName.length; j++) {
                         carriers[j] = dropdownCarrierName[j].innerHTML;
                     }
 
-                    console.log(carriers);
+                    var legDepartureTimes = [];
 
-                    // var inputDepartureCode = document.querySelectorAll("#input-departure-code");
-                    // var inputDepartureName = document.querySelectorAll("#input-departure-name");
-                    // var inputDepartureTime = document.querySelectorAll("#input-departure-time");
-                    // var inputItineraryType = document.querySelectorAll("#input-itinerary-type");
-                    // var inputArrivalTime = document.querySelectorAll("#input-arrival-time");
-                    // var inputArrivalCode = document.querySelectorAll("#input-arrival-code");
-                    // var inputArrivalName = document.querySelectorAll("#input-arrival-name");
-                    // var inputTotalPrice = document.querySelectorAll("#input-price");
-                    // var inputDropdownCarrierName = document.querySelectorAll("#input-dropdown-carrier-name");
-                    // var inputDropdownLegDepartureTime = document.querySelectorAll("#input-dropdown-leg-departure-time");
-                    // var inputDropdownLegDestinationCode = document.querySelectorAll("#input-dropdown-leg-destination-code");
-                    // var inputDropdownLegDestinationName = document.querySelectorAll("#input-dropdown-leg-destination-name");
+                    for (let j = 0; j < dropdownLegDepartureTime.length; j++) {
+                        legDepartureTimes[j] = dropdownLegDepartureTime[j].innerHTML;
+                    }
 
-                    // inputDepartureCode[i].value = departureCode.innerHTML;
-                    // inputDepartureName[i].value = departureName.innerHTML;
-                    // inputDepartureTime[i].value = departureTime.innerHTML;
-                    // inputItineraryType[i].value = itineraryType.innerHTML;
-                    // inputArrivalTime[i].value = arrivalTime.innerHTML;
-                    // inputArrivalCode[i].value = arrivalCode.innerHTML;
-                    // inputArrivalName[i].value = arrivalName.innerHTML;
-                    // inputTotalPrice[i].value = totalPrice.innerHTML;
+                    var legDestinationCodes = [];
 
-                    // for (let j = 0; j < dropdownCarrierName.length; j++) {
-                    //     if (j == 0) {
-                    //         inputDropdownCarrierName[i].value += dropdownCarrierName[j].innerHTML;
-                    //     }
-                    //     else {
-                    //         inputDropdownCarrierName[i].value += ", " + dropdownCarrierName[j].innerHTML;
-                    //     }
-                    // }
+                    for (let j = 0; j < dropdownLegDestinationCode.length - 1; j++) {
+                        legDestinationCodes[j] = dropdownLegDestinationCode[j].innerHTML;    
+                    }
 
-                    // for (let j = 0; j < dropdownLegDepartureTime.length; j++) {
-                    //     if (j == 0) {
-                    //         inputDropdownLegDepartureTime[i].value += dropdownLegDepartureTime[j].innerHTML;
-                    //     }
-                    //     else {
-                    //         inputDropdownLegDepartureTime[i].value += ", " + dropdownLegDepartureTime[j].innerHTML;
-                    //     }
-                    // }
+                    var legDestinationNames = [];
 
-                    // for (let j = 0; j < dropdownLegDestinationCode.length; j++) {
-                    //     if (j == 0) {
-                    //         inputDropdownLegDestinationCode[i].value += dropdownLegDestinationCode[j].innerHTML;
-                    //     }
-                    //     else {
-                    //         inputDropdownLegDestinationCode[i].value += ", " + dropdownLegDestinationCode[j].innerHTML;
-                    //     }
-                    // }
+                    for (let j = 0; j < dropdownLegDestinationName.length - 1; j++) {
+                        legDestinationNames[j] = dropdownLegDestinationName[j].innerHTML;
+                    }
 
-                    // for (let j = 0; j < dropdownLegDestinationName.length; j++) {
-                    //     if (j == 0) {
-                    //         inputDropdownLegDestinationName[i].value += dropdownLegDestinationName[j].innerHTML;
-                    //     }
-                    //     else {
-                    //         inputDropdownLegDestinationName[i].value += ", " + dropdownLegDestinationName[j].innerHTML;
-                    //     }
-                    // }
+                    console.log(carriers, legDepartureTimes, legDestinationCodes, legDestinationNames);
 
                     post();
 
@@ -279,10 +221,16 @@
                                 "arrivalTime" : arrivalTime,
                                 "arrivalCode" : arrivalCode,
                                 "arrivalName" : arrivalName,
-                                "totalPrice" : totalPrice
+                                "totalPrice" : totalPrice,
+                                "carriers" : carriers,
+                                "legDepartureTimes" : legDepartureTimes,
+                                "legDestinationCodes" : legDestinationCodes,
+                                "legDestinationNames" : legDestinationNames
                             }
                         ));
                     }
+                    saveBtns[i].disabled = true;
+                    saveBtns[i].innerHTML = "Saved";
                 });
             }
         });

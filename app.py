@@ -5,16 +5,16 @@ import datetime
 
 from aiosqlite import connect
 from flask import Flask, redirect, render_template, request, session
-from amadeus import Client, ResponseError, Location
+from amadeus import Client, ResponseError
 from dotenv import load_dotenv
-from helpers import convert_to_list, matchAirline, apology, add_years, login_required
+from helpers import matchAirline, apology, add_years, login_required
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
 
-# if __name__ == '__main__':
-#     app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
 
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
@@ -88,6 +88,7 @@ with sqlite3.connect('airports.db', check_same_thread=False) as con:
 # HOMEPAGE
 @app.route('/', methods=['GET', 'POST'])
 def index():
+
     with sqlite3.connect('airports.db', check_same_thread=False) as con:
         cursor5 = con.cursor()
         cursor5.execute('SELECT code, name FROM airports')
@@ -144,12 +145,21 @@ def index():
         return redirect('/results')
 
     else:
-        return render_template('index.html', countries=countries, airport_count=airport_count)
+        user_id = session.get("user_id")
+
+        if user_id == None:
+            return render_template('index.html', countries=countries, airport_count=airport_count)
+        else:
+            with sqlite3.connect("airports.db", check_same_thread=False) as con:
+                cursor = con.cursor()
+                username = cursor.execute('SELECT username FROM users WHERE id = ?', (session["user_id"],)).fetchone()
+            return render_template('index.html', countries=countries, airport_count=airport_count, username=username[0].capitalize())
 
 
 # REGISTER
 @app.route("/register", methods=["GET", "POST"])
 def register():
+
     with sqlite3.connect('airports.db', check_same_thread=False) as con:
         cursor = con.cursor()
         users = cursor.execute('SELECT username FROM users')
@@ -182,6 +192,7 @@ def register():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+
     session.clear()
 
     if request.method == 'POST':
@@ -219,49 +230,47 @@ def logout():
     return redirect("/")
     
 
-@app.route("/favorites")
+@app.route("/favorites", methods=['POST', 'GET'])
 @login_required
 def favorites():
-        return render_template('favorites.html')
+    with sqlite3.connect('airports.db', check_same_thread=False) as con:
+        cursor = con.cursor()
+        if request.method == "POST":
+            data = request.get_json()
+            cursor.execute("DELETE FROM favorites WHERE id = ?;", (data["id"],))
+
+            return redirect("/favorites")
+
+        else:
+            favorites = cursor.execute("SELECT * FROM favorites WHERE user_id = ?", (session["user_id"],)).fetchall()
+            return render_template('favorites.html', favorites=favorites)
 
 
 @app.route("/results", methods=['GET', 'POST'])
 def results():
+
     with sqlite3.connect('airports.db', check_same_thread=False) as con:
         if request.method == 'POST':
-            # departure_code = request.form.get('departure-code')
-            # departure_name = request.form.get('departure-name')
-            # departure_time = request.form.get('departure-time')
-            # itinerary_type = request.form.get('itinerary-type')
-            # arrival_time = request.form.get('arrival-time')
-            # arrival_code = request.form.get('arrival-code')
-            # arrival_name = request.form.get('arrival-name')
-            # total_price = request.form.get('price')
-            # carrier_name = request.form.get('dropdown-carrier-name')
-            # leg_departure_time = request.form.get('dropdown-leg-departure-time')
-            # leg_destination_code = request.form.get('dropdown-leg-destination-code')
-            # leg_destination_name = request.form.get('dropdown-leg-destination-name')
-
-            # cursor = con.cursor()
-            # sql = 'INSERT INTO favorites (departureCode, departureName, departureTime, itineraryType, arrivalTime, arrivalCode, arrivalName, totalPrice, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);'
-            # values = departure_code, departure_name, departure_time, itinerary_type, arrival_time, arrival_code, arrival_name, total_price, session["user_id"]
-            # return cursor.execute(sql, values)
-
-            # carriers_list = convert_to_list(carrier_name)
-            # for i in range(len(carriers_list)):
-            #     carrier = carriers_list[i]
-            #     cursor.execute(sql, carrier)
-
             data = request.get_json()
-            print(data)
-            print(data["departureCode"])
-            print(data["departureName"])
-            print(data["departureTime"])
-            print(data["itineraryType"])
-            print(data["arrivalTime"])
-            print(data["arrivalCode"])
-            print(data["arrivalName"])
-            print(data["totalPrice"])
+
+            number_of_legs = len(data["carriers"]) - 1
+            cursor = con.cursor()
+            
+            if number_of_legs == 0:
+                sql = 'INSERT INTO favorites (departureCode, departureName, departureTime, itineraryType, arrivalTime, arrivalCode, arrivalName, totalPrice, carrierName, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
+                values = data["departureCode"], data["departureName"], data["departureTime"], data["itineraryType"], data["arrivalTime"], data["arrivalCode"], data["arrivalName"], data["totalPrice"], data["carriers"][0], session["user_id"]
+                cursor.execute(sql, values)
+
+            elif number_of_legs == 1:
+                sql = 'INSERT INTO favorites (departureCode, departureName, departureTime, itineraryType, arrivalTime, arrivalCode, arrivalName, totalPrice, carrierName, carrierName1, legDepartureTime1, legDestinationCode1, legDestinationName1, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
+                values = data["departureCode"], data["departureName"], data["departureTime"], data["itineraryType"], data["arrivalTime"], data["arrivalCode"], data["arrivalName"], data["totalPrice"], data["carriers"][0], data["carriers"][1], data["legDepartureTimes"][0], data["legDestinationCodes"][0], data["legDestinationNames"][0], session["user_id"]
+                cursor.execute(sql, values)
+
+            elif number_of_legs == 2:
+                sql = 'INSERT INTO favorites (departureCode, departureName, departureTime, itineraryType, arrivalTime, arrivalCode, arrivalName, totalPrice, carrierName, carrierName1, legDepartureTime1, legDestinationCode1, legDestinationName1, carrierName2, legDepartureTime2, legDestinationCode2, legDestinationName2, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
+                values = data["departureCode"], data["departureName"], data["departureTime"], data["itineraryType"], data["arrivalTime"], data["arrivalCode"], data["arrivalName"], data["totalPrice"], data["carriers"][0], data["carriers"][1], data["legDepartureTimes"][0], data["legDestinationCodes"][0], data["legDestinationNames"][0], data["carriers"][2], data["legDepartureTimes"][1], data["legDestinationCodes"][1], data["legDestinationNames"][1], session["user_id"]
+                cursor.execute(sql, values)
+                
             return ("", 204)
 
         else:
