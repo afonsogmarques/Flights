@@ -162,7 +162,7 @@ def register():
 
     with sqlite3.connect('airports.db', check_same_thread=False) as con:
         cursor = con.cursor()
-        users = cursor.execute('SELECT username FROM users')
+        users = cursor.execute('SELECT username FROM users').fetchall()
 
         if request.method == 'POST':
             username = request.form.get('username')
@@ -178,7 +178,7 @@ def register():
                 return apology("Passwords don't match!")
 
             for user in users:
-                if username == user:
+                if username == user[0]:
                     return apology('Username is already in use!')
             
             sql = "INSERT INTO users (username, hash) VALUES (?, ?)"
@@ -187,7 +187,7 @@ def register():
 
             return redirect('/')
         else:
-            return render_template('register.html')
+            return render_template('register.html', users=users)
 
 
 @app.route("/login", methods=['GET', 'POST'])
