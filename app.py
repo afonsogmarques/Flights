@@ -124,14 +124,16 @@ def index():
         
         session["response"] = []
 
-        for code in airport_codes:
+        for index, code in enumerate(airport_codes):
+            if index == 10:
+                break
             try:
                 flights = amadeus.shopping.flight_offers_search.get(
                     originLocationCode=code,
                     destinationLocationCode=iataCode,
                     departureDate=session["date"],
                     adults='1',
-                    max='4'
+                    max='1'
                 ).data
 
                 for entry in flights:
