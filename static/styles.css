@@ -73,7 +73,7 @@ main {
 }
 
 #dropdown-departure-name, #dropdown-leg-destination-name {
-    max-width: 157px;
+    max-width: 100px;
 }
 
 .direct {
@@ -105,7 +105,7 @@ div#loading {
 }
 
 #button-container {
-    width: 8.5%;
+    width: 80px;
 }
 
 #button-container button {
@@ -118,4 +118,22 @@ div#loading {
     background-repeat: no-repeat;
     background-size: contain;
     background-position-x: 56%;
+}
+
+#flight-info, #flight-info-wrapper {
+    gap: 3vw;
+}
+
+#dropdown-flight-info {
+    overflow: scroll;
+}
+
+#divider {
+    width: 25%;
+    max-width: 300px;
+    min-width: 100px;
+}
+
+#search-box {
+    gap: 40px;
 }

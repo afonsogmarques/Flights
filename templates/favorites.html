@@ -14,7 +14,7 @@
                     <div id="dropdown" class="dropdown d-flex flex-column" style="gap: 20px;">
                         <div class="dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <div class="card bg-primary bg-gradient text-white rounded-4">
-                                <div class="d-flex flex-row justify-content-around p-2 pt-4 pb-4">
+                                <div class="d-flex flex-row flex-wrap justify-content-around ps-5 pt-5 pb-5 pe-5">
                                     <div class="d-flex justify-content-center flex-column">
                                         <p id="flight-id" class="d-none">{{ entry[0] }}</p>
                                         <p class="text-start mb-0">From</p>
@@ -26,7 +26,7 @@
                                         <h3 id="departure-time" class="time text-start mb-0">{{ entry[3] }}</h3>
                                         <p class="text-start mt-0">{{ entry[18] }}</p>
                                     </div>
-                                    <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center flex-wrap">
                                         {% if entry[4] == "Direct flight" %}
                                             <h6 id="itinerary-type" class="mb-0 direct">{{ entry[4] }}</h6>
                                         {% elif entry[4] == "1 stopover" %}
@@ -35,17 +35,19 @@
                                             <h6 id="itinerary-type" class="mb-0 two-stop">{{ entry[4] }}</h6>
                                         {% endif %}
                                     </div>
-                                    <div class="d-flex justify-content-center flex-column">
-                                        <p class="text-start mb-2">Arrival</p>
-                                        <h3 id="arrival-time" class="time text-start mb-0">{{ entry[5] }}</h3>
-                                        <p class="text-start mb-2">{{ entry[19] }}</p>
+                                    <div id="flight-info-wrapper" class="d-flex flex-wrap">
+                                        <div class="d-flex justify-content-center flex-column">
+                                            <p class="text-start mb-2">Arrival</p>
+                                            <h3 id="arrival-time" class="time text-start mb-0">{{ entry[5] }}</h3>
+                                            <p class="text-start mb-2">{{ entry[19] }}</p>
+                                        </div>
+                                        <div class="d-flex justify-content-center flex-column">
+                                            <p class=" text-start mb-0">To</p>
+                                            <h3 id="arrival-code" class="text-start">{{ entry[6] }}</h3>
+                                            <h6 id="arrival-name" class="text-start">{{ entry[7] }}</h6>
+                                        </div>
                                     </div>
-                                    <div class="d-flex justify-content-center flex-column">
-                                        <p class=" text-start mb-0">To</p>
-                                        <h3 id="arrival-code" class="text-start">{{ entry[6] }}</h3>
-                                        <h6 id="arrival-name" class="text-start">{{ entry[7] }}</h6>
-                                    </div>
-                                    <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center flex-wrap">
                                         <h3 class="mb-0"  id="price">{{ entry[8] }}</h3>
                                     </div>
                                     <div id="button-container" class="d-flex flex-column justify-content-center align-items-center">
@@ -59,15 +61,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="dropdown-menu" class="dropdown-menu rounded-4 pt-3 pb-3">
+                        <div id="dropdown-menu" class="dropdown-menu rounded-4 pt-5 pb-5">
                             <div class="d-flex align-items-center flex-column">
-                                <div class="d-flex flex-row justify-content-center align-items-center w-100 ps-5 pe-5">
+                                <div id="dropdown-flight-info" class="d-flex flex-row justify-content-center align-items-center w-100 ps-5 pe-5">
                                     <div class="d-flex flex-column align-items-center">
                                         <h6 id="dropdown-departure-time" class="text-muted fw-light text-center time">{{ entry[3] }}</h6>
                                         <h4 id="dropdown-departure-code" class="mb-0" id="departure-code">{{ entry[1] }}</h4>
                                         <h6 id="dropdown-departure-name" class="text-muted fw-light mt-1 mb-0 text-center">{{ entry[2] }}</h6>
                                     </div>
-                                    <div class="ms-3 me-3 w-25">
+                                    <div id="divider" class="ms-3 me-3">
                                         <!-- CARRIER NAME -->
                                         <p id="carrier-name" class="text-muted text-center">{{ entry[9] }}</p>
                                         <div class="bg-secondary" style="height: 3px;"></div>
@@ -83,7 +85,7 @@
                                                 <h6 id="dropdown-leg-destination-name" class="text-muted fw-light mt-1 mb-0 text-center">{{ entry[14] }}</h6>
                                             </div>
                                         </div>
-                                        <div class="ms-3 me-3 w-25">
+                                        <div id="divider" class="ms-3 me-3">
                                             <!-- CARRIER NAME -->
                                             <p id="carrier-name" class="text-muted text-center">{{ entry[10] }}</p>
                                             <div class="bg-secondary" style="height: 3px;"></div>
@@ -98,7 +100,7 @@
                                                 <h6 id="dropdown-leg-destination-name" class="text-muted fw-light mt-1 mb-0 text-center">{{ entry[17] }}</h6>
                                             </div>
                                         </div>
-                                        <div class="ms-3 me-3 w-25">
+                                        <div id="divider" class="ms-3 me-3">
                                             <!-- CARRIER NAME -->
                                             <p id="carrier-name" class="text-muted text-center">{{ entry[11] }}</p>
                                             <div class="bg-secondary" style="height: 3px;"></div>
@@ -124,7 +126,7 @@
                                                 <h6 id="dropdown-leg-destination-name" class="text-muted fw-light mt-1 mb-0 text-center">{{ entry[14] }}</h6>
                                             </div>
                                         </div>
-                                        <div class="ms-3 me-3 w-25">
+                                        <div id="divider" class="ms-3 me-3">
                                             <!-- CARRIER NAME -->
                                             <p id="carrier-name" class="text-muted text-center">{{ entry[10] }}</p>
                                             <div class="bg-secondary" style="height: 3px;"></div>
