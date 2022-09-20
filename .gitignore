@@ -3,3 +3,6 @@ dotenv.env
 
 #ignore flask_session
 /*_session/
+
+#ignore sql file
+favorites.sql

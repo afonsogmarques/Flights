@@ -90,6 +90,7 @@ main {
 
 #main-content {
     height: 77vh;
+    display: flex;
 }
 
 div#loading {

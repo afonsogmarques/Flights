@@ -5,6 +5,17 @@
 {% endblock %}
 
 {% block main %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+            <div class="d-flex justify-content-center align-items-center mb-0">
+                <div class="alert alert-success w-50" role="alert">
+                    {{ msg }}
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <div id="main-content" class="d-flex justify-content-center align-items-center flex-column">
         <h1 class="mb-5">Register</h1>
         <form action="/register" method="post">

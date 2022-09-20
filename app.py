@@ -1,10 +1,8 @@
 import os
-import json
 import sqlite3
 import datetime
 
-from aiosqlite import connect
-from flask import Flask, redirect, render_template, request, session
+from flask import Flask, redirect, render_template, request, session, flash
 from amadeus import Client, ResponseError
 from dotenv import load_dotenv
 from helpers import matchAirline, apology, add_years, login_required
@@ -185,11 +183,13 @@ def register():
             values = username, generate_password_hash(password)
             cursor.execute(sql, values)
 
-            return redirect('/')
+            flash("Successfully registered!")
+            return redirect('/register')
         else:
             return render_template('register.html', users=users)
 
 
+#LOGIN
 @app.route("/login", methods=['GET', 'POST'])
 def login():
 
@@ -218,6 +218,7 @@ def login():
         return render_template("login.html")
 
 
+#LOGOUT
 @app.route("/logout")
 @login_required
 def logout():
@@ -230,6 +231,7 @@ def logout():
     return redirect("/")
     
 
+#FAVORITES
 @app.route("/favorites", methods=['POST', 'GET'])
 @login_required
 def favorites():
@@ -246,6 +248,7 @@ def favorites():
             return render_template('favorites.html', favorites=favorites)
 
 
+# RESULTS
 @app.route("/results", methods=['GET', 'POST'])
 def results():
 
@@ -257,18 +260,18 @@ def results():
             cursor = con.cursor()
             
             if number_of_legs == 0:
-                sql = 'INSERT INTO favorites (departureCode, departureName, departureTime, itineraryType, arrivalTime, arrivalCode, arrivalName, totalPrice, carrierName, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
-                values = data["departureCode"], data["departureName"], data["departureTime"], data["itineraryType"], data["arrivalTime"], data["arrivalCode"], data["arrivalName"], data["totalPrice"], data["carriers"][0], session["user_id"]
+                sql = 'INSERT INTO favorites (departureCode, departureName, departureTime, itineraryType, arrivalTime, arrivalCode, arrivalName, totalPrice, carrierName, carrierName1, legDepartureTime1, legDestinationCode1, legDestinationName1, carrierName2, legDepartureTime2, legDestinationCode2, legDestinationName2, date, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
+                values = data["departureCode"], data["departureName"], data["departureTime"], data["itineraryType"], data["arrivalTime"], data["arrivalCode"], data["arrivalName"], data["totalPrice"], data["carriers"][0], "-", "-", "-", "-", "-", "-", "-", "-", data["date"], session["user_id"]
                 cursor.execute(sql, values)
 
             elif number_of_legs == 1:
-                sql = 'INSERT INTO favorites (departureCode, departureName, departureTime, itineraryType, arrivalTime, arrivalCode, arrivalName, totalPrice, carrierName, carrierName1, legDepartureTime1, legDestinationCode1, legDestinationName1, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
-                values = data["departureCode"], data["departureName"], data["departureTime"], data["itineraryType"], data["arrivalTime"], data["arrivalCode"], data["arrivalName"], data["totalPrice"], data["carriers"][0], data["carriers"][1], data["legDepartureTimes"][0], data["legDestinationCodes"][0], data["legDestinationNames"][0], session["user_id"]
+                sql = 'INSERT INTO favorites (departureCode, departureName, departureTime, itineraryType, arrivalTime, arrivalCode, arrivalName, totalPrice, carrierName, carrierName1, legDepartureTime1, legDestinationCode1, legDestinationName1, carrierName2, legDepartureTime2, legDestinationCode2, legDestinationName2, date, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
+                values = data["departureCode"], data["departureName"], data["departureTime"], data["itineraryType"], data["arrivalTime"], data["arrivalCode"], data["arrivalName"], data["totalPrice"], data["carriers"][0], data["carriers"][1], data["legDepartureTimes"][0], data["legDestinationCodes"][0], data["legDestinationNames"][0], "-", "-", "-", "-", data["date"], session["user_id"]
                 cursor.execute(sql, values)
 
             elif number_of_legs == 2:
-                sql = 'INSERT INTO favorites (departureCode, departureName, departureTime, itineraryType, arrivalTime, arrivalCode, arrivalName, totalPrice, carrierName, carrierName1, legDepartureTime1, legDestinationCode1, legDestinationName1, carrierName2, legDepartureTime2, legDestinationCode2, legDestinationName2, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
-                values = data["departureCode"], data["departureName"], data["departureTime"], data["itineraryType"], data["arrivalTime"], data["arrivalCode"], data["arrivalName"], data["totalPrice"], data["carriers"][0], data["carriers"][1], data["legDepartureTimes"][0], data["legDestinationCodes"][0], data["legDestinationNames"][0], data["carriers"][2], data["legDepartureTimes"][1], data["legDestinationCodes"][1], data["legDestinationNames"][1], session["user_id"]
+                sql = 'INSERT INTO favorites (departureCode, departureName, departureTime, itineraryType, arrivalTime, arrivalCode, arrivalName, totalPrice, carrierName, carrierName1, legDepartureTime1, legDestinationCode1, legDestinationName1, carrierName2, legDepartureTime2, legDestinationCode2, legDestinationName2, date, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
+                values = data["departureCode"], data["departureName"], data["departureTime"], data["itineraryType"], data["arrivalTime"], data["arrivalCode"], data["arrivalName"], data["totalPrice"], data["carriers"][0], data["carriers"][1], data["legDepartureTimes"][0], data["legDestinationCodes"][0], data["legDestinationNames"][0], data["carriers"][2], data["legDepartureTimes"][1], data["legDestinationCodes"][1], data["legDestinationNames"][1], data["date"], session["user_id"]
                 cursor.execute(sql, values)
                 
             return ("", 204)

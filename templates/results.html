@@ -7,7 +7,7 @@
 {% block main %}
 <div class="d-flex justify-content-center align-items-center flex-column">
     <h1 class="mb-3 mt-5">Flights to {{ destination }}</h1>
-    <h5 class="text-muted mb-5 w-75">{{ date }}</h5>
+    <h5 id="date" class="text-muted mb-5 w-75">{{ date }}</h5>
     <div class="d-flex justify-content-center w-100 mb-5 mt-5" id="results">
         <div class="w-100 d-flex flex-column">
             <button class="btn btn-secondary align-self-end mb-3 visually-hidden" id="sort"></button>
@@ -159,6 +159,7 @@
 
             // GET FLIGHT INFO FROM FRONTEND TO SAVE IT IN SQL DB
             var saveBtns = document.querySelectorAll('#save');
+            var date = document.querySelector("#date").innerHTML;
 
             for (let i = 0; i < saveBtns.length; i++) {
                 saveBtns[i].addEventListener('click', function(){
@@ -209,6 +210,7 @@
                     post();
 
                     function post() {
+                        
                         var http = new XMLHttpRequest;
                         http.open("POST", "{{ url_for('results') }}", true);
                         http.setRequestHeader("Content-type", "application/json");
@@ -225,7 +227,8 @@
                                 "carriers" : carriers,
                                 "legDepartureTimes" : legDepartureTimes,
                                 "legDestinationCodes" : legDestinationCodes,
-                                "legDestinationNames" : legDestinationNames
+                                "legDestinationNames" : legDestinationNames,
+                                "date" : date
                             }
                         ));
                     }
