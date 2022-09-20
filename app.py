@@ -1,5 +1,3 @@
-import os
-import json
 import sqlite3
 import datetime
 
@@ -32,8 +30,6 @@ def after_request(response):
 
 app.jinja_env.filters["matchAirline"] = matchAirline
 app.jinja_env.filters["date_formatter"] = skyscanner_date_fromatter
-
-load_dotenv('dotenv.env')
 
 amadeus = Client(
     client_id="1mJbRf9sS5obT0KGniu45QSmcuch307S",
