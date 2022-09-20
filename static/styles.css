@@ -104,10 +104,6 @@ div#loading {
     margin-top: -3rem;
 }
 
-#button-container {
-    width: 80px;
-}
-
 #button-container button {
     min-height: 50px;
     max-width: 100px;
