@@ -49,3 +49,11 @@ def login_required(f):
             return redirect("/login")
         return f(*args, **kwargs)
     return decorated_function
+
+
+def skyscanner_date_fromatter(date):
+    new_date = date.replace("-", "");
+    skyscanner_date = new_date[2:8];
+
+    return skyscanner_date
+

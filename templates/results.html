@@ -8,92 +8,103 @@
 <div class="d-flex justify-content-center align-items-center flex-column">
     <h1 class="mb-3 mt-5">Flights to {{ destination }}</h1>
     <h5 id="date" class="text-muted mb-5 w-75">{{ date }}</h5>
-    <div class="d-flex justify-content-center w-100 mb-5 mt-5" id="results">
-        <div class="w-100 d-flex flex-column">
-            <button class="btn btn-secondary align-self-end mb-3 visually-hidden" id="sort"></button>
-            <div id="dropdown" class="dropdown d-flex flex-column" style="gap: 20px;">
-                {% for entry in response %}
-                    <div class="dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <div class="card bg-primary bg-gradient text-white rounded-4">
-                            <div class="d-flex flex-row justify-content-around p-2 pt-4 pb-4">
-                                <div class="d-flex justify-content-center flex-column">
-                                    <p class="text-start mb-0">From</p>
-                                    <h3 id="departure-code" class="text-start">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['iataCode'] }}</h3>
-                                    <h6 id="departure-name" class="text-start">{{ codeTranslator[entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['iataCode']] }}</h6>
-                                </div>
-                                <div class="d-flex justify-content-center flex-column">
-                                    <p class=" text-start mb-0">Departure</p>
-                                    <h3 id="departure-time" class="time">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['at'] }}</h3>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    {% if (entry['flightOffers'][0]['itineraries'][0]['segments']|length) == 1 %}
-                                        <h6 id="itinerary-type" class="mb-0 direct">Direct flight</h6>
-                                    {% endif %}
-                                    {% if (entry['flightOffers'][0]['itineraries'][0]['segments']|length) >= 2 %}
-                                        {% if (entry['flightOffers'][0]['itineraries'][0]['segments']|length) == 2 %}
-                                            <h6 id="itinerary-type" class="mb-0 one-stop">1 stopover</h6>
-                                        {% else %}
-                                            <h6 id="itinerary-type" class="mb-0 two-stop">{{ (entry['flightOffers'][0]['itineraries'][0]['segments']|length) - 1 }} stopovers</h6>
+    {% if response %}
+        <div class="d-flex justify-content-center w-100 mb-5 mt-5" id="results">
+            <div class="w-100 d-flex flex-column">
+                <button class="btn btn-secondary align-self-end mb-3 visually-hidden" id="sort"></button>
+                <div id="dropdown" class="dropdown d-flex flex-column" style="gap: 20px;">
+                    {% for entry in response %}
+                        <div class="dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="card bg-primary bg-gradient text-white rounded-4">
+                                <div class="d-flex flex-row justify-content-around p-2 pt-4 pb-4">
+                                    <div class="d-flex justify-content-center flex-column">
+                                        <p class="text-start mb-0">From</p>
+                                        <h3 id="departure-code" class="text-start">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['iataCode'] }}</h3>
+                                        <h6 id="departure-name" class="text-start">{{ codeTranslator[entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['iataCode']] }}</h6>
+                                    </div>
+                                    <div class="d-flex justify-content-center flex-column">
+                                        <p class=" text-start mb-2">Departure</p>
+                                        <h3 id="departure-time" class="time text-start mb-0">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['at'] }}</h3>
+                                        <p class="text-start mb-2">{{ date }}</h3>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        {% if (entry['flightOffers'][0]['itineraries'][0]['segments']|length) == 1 %}
+                                            <h6 id="itinerary-type" class="mb-0 direct">Direct flight</h6>
                                         {% endif %}
-                                    {% endif %}
-                                </div>
-                                <div class="d-flex justify-content-center flex-column">
-                                    <p class=" text-start mb-0">Arrival</p>
-                                    <h3 id="arrival-time" class="time">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][(entry['flightOffers'][0]['itineraries'][0]['segments']|length) - 1]['arrival']['at'] }}</h3>
-                                </div>
-                                <div class="d-flex justify-content-center flex-column">
-                                    <p class=" text-start mb-0">To</p>
-                                    <h3 id="arrival-code" class="text-start">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][(entry['flightOffers'][0]['itineraries'][0]['segments']|length) - 1]['arrival']['iataCode'] }}</h3>
-                                    <h6 id="arrival-name" class="text-start">{{ codeTranslator[entry['flightOffers'][0]['itineraries'][0]['segments'][(entry['flightOffers'][0]['itineraries'][0]['segments']|length) - 1]['arrival']['iataCode']] }}</h6>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <h3 class="mb-0"  id="price">&euro;{{ entry['flightOffers'][0]['price']['grandTotal'] }}</h3>
-                                </div>
-                                {% if session["user_id"] %}
-                                    <div class="d-flex justify-content-center align-items-center">
-                                        <button id="save" class="btn btn-success">Save</button>
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    <div id="dropdown-menu" class="dropdown-menu rounded-4 pt-3 pb-3">
-                        <div class="d-flex align-items-center flex-column">
-                            <div class="d-flex flex-row justify-content-center align-items-center w-100 ps-5 pe-5">
-                                <div class="d-flex flex-column align-items-center">
-                                    <h6 id="dropdown-departure-time" class="text-muted fw-light text-center time">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['at'] }}</h6>
-                                    <h4 id="dropdown-departure-code" class="mb-0" id="departure-code">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['iataCode'] }}</h4>
-                                    <h6 id="dropdown-departure-name" class="text-muted fw-light mt-1 mb-0 text-center">{{ codeTranslator[entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['iataCode']] }}</h6>
-                                </div>
-                                {% for i in range(entry['flightOffers'][0]['itineraries'][0]['segments']|length) %}
-                                    <div class="ms-3 me-3 w-25">
-                                        <!-- CARRIER NAME -->
-                                        <p id="carrier-name" class="text-muted text-center">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][i]['carrierCode'] | matchAirline }}</p>
-                                        <div class="bg-secondary" style="height: 3px;"></div>
-                                    </div>
-                                    <div>
-                                        <div class="d-flex flex-column align-items-center">
-                                            {% if i == (entry['flightOffers'][0]['itineraries'][0]['segments']|length) - 1 %}
-                                                <!-- ARRIVAL TIME -->
-                                                <h6 id="dropdown-leg-arrival-time" class="text-muted fw-light text-center time">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][i]['arrival']['at'] }}</h6>
+                                        {% if (entry['flightOffers'][0]['itineraries'][0]['segments']|length) >= 2 %}
+                                            {% if (entry['flightOffers'][0]['itineraries'][0]['segments']|length) == 2 %}
+                                                <h6 id="itinerary-type" class="mb-0 one-stop">1 stopover</h6>
                                             {% else %}
-                                                <!-- LEG DEPARTURE TIME -->
-                                                <h6 id="dropdown-leg-departure-time" class="text-muted fw-light text-center time">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][i + 1]['departure']['at'] }}</h6>
+                                                <h6 id="itinerary-type" class="mb-0 two-stop">{{ (entry['flightOffers'][0]['itineraries'][0]['segments']|length) - 1 }} stopovers</h6>
                                             {% endif %}
-                                            <!-- LEG DESTINATION CODE -->
-                                            <h4 id="dropdown-leg-destination-code" class="mb-0" id="arrival-code">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][i]['arrival']['iataCode'] }}</h4>
-                                            <!-- LEG DESTINATION NAME -->
-                                            <h6 id="dropdown-leg-destination-name" class="text-muted fw-light mt-1 mb-0 text-center">{{ codeTranslator[entry['flightOffers'][0]['itineraries'][0]['segments'][i]['arrival']['iataCode']] }}</h6>
+                                        {% endif %}
+                                    </div>
+                                    <div class="d-flex justify-content-center flex-column">
+                                        <p class=" text-start mb-2">Arrival</p>
+                                        <h3 id="arrival-time" class="time text-start mb-0">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][(entry['flightOffers'][0]['itineraries'][0]['segments']|length) - 1]['arrival']['at'] }}</h3>
+                                        <p class="date2 text-start mb-2">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][(entry['flightOffers'][0]['itineraries'][0]['segments']|length) - 1]['arrival']['at'] }}</p>
+                                    </div>
+                                    <div class="d-flex justify-content-center flex-column">
+                                        <p class=" text-start mb-0">To</p>
+                                        <h3 id="arrival-code" class="text-start">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][(entry['flightOffers'][0]['itineraries'][0]['segments']|length) - 1]['arrival']['iataCode'] }}</h3>
+                                        <h6 id="arrival-name" class="text-start">{{ codeTranslator[entry['flightOffers'][0]['itineraries'][0]['segments'][(entry['flightOffers'][0]['itineraries'][0]['segments']|length) - 1]['arrival']['iataCode']] }}</h6>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <h3 class="mb-0"  id="price">&euro;{{ entry['flightOffers'][0]['price']['grandTotal'] }}</h3>
+                                    </div>
+                                    <div id="button-container" class="d-flex flex-column justify-content-center align-items-center">
+                                        {% if session["user_id"] %}
+                                            <div class="d-flex justify-content-center align-items-center w-100 mb-4">
+                                                <button id="save" class="btn btn-success w-100">Save</button>
+                                            </div>
+                                        {% endif %}
+                                        <div class="d-flex justify-content-center align-items-center w-100">
+                                            <button id="skyscanner" onclick="window.open('https://www.skyscanner.net/transport/flights/{{ entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['iataCode'] }}/{{ entry['flightOffers'][0]['itineraries'][0]['segments'][(entry['flightOffers'][0]['itineraries'][0]['segments']|length) - 1]['arrival']['iataCode'] }}/{{ date | date_formatter }}', '_blank');" class="btn btn-light w-100"></button>
                                         </div>
                                     </div>
-                                {% endfor %}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
+                        <div id="dropdown-menu" class="dropdown-menu rounded-4 pt-3 pb-3">
+                            <div class="d-flex align-items-center flex-column">
+                                <div class="d-flex flex-row justify-content-center align-items-center w-100 ps-5 pe-5">
+                                    <div class="d-flex flex-column align-items-center">
+                                        <h6 id="dropdown-departure-time" class="text-muted fw-light text-center time">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['at'] }}</h6>
+                                        <h4 id="dropdown-departure-code" class="mb-0" id="departure-code">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['iataCode'] }}</h4>
+                                        <h6 id="dropdown-departure-name" class="text-muted fw-light mt-1 mb-0 text-center">{{ codeTranslator[entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['iataCode']] }}</h6>
+                                    </div>
+                                    {% for i in range(entry['flightOffers'][0]['itineraries'][0]['segments']|length) %}
+                                        <div class="ms-3 me-3 w-25">
+                                            <!-- CARRIER NAME -->
+                                            <p id="carrier-name" class="text-muted text-center">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][i]['carrierCode'] | matchAirline }}</p>
+                                            <div class="bg-secondary" style="height: 3px;"></div>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                {% if i == (entry['flightOffers'][0]['itineraries'][0]['segments']|length) - 1 %}
+                                                    <!-- ARRIVAL TIME -->
+                                                    <h6 id="dropdown-leg-arrival-time" class="text-muted fw-light text-center time">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][i]['arrival']['at'] }}</h6>
+                                                {% else %}
+                                                    <!-- LEG DEPARTURE TIME -->
+                                                    <h6 id="dropdown-leg-departure-time" class="text-muted fw-light text-center time">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][i + 1]['departure']['at'] }}</h6>
+                                                {% endif %}
+                                                <!-- LEG DESTINATION CODE -->
+                                                <h4 id="dropdown-leg-destination-code" class="mb-0" id="arrival-code">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][i]['arrival']['iataCode'] }}</h4>
+                                                <!-- LEG DESTINATION NAME -->
+                                                <h6 id="dropdown-leg-destination-name" class="text-muted fw-light mt-1 mb-0 text-center">{{ codeTranslator[entry['flightOffers'][0]['itineraries'][0]['segments'][i]['arrival']['iataCode']] }}</h6>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
-    </div>
+    {% else %}
+        <p>No flights were found for your search criteria. <a href="/" class="link-primary">New Search</a>.</p>
+    {% endif %}
 </div>
 {% endblock %}
 
@@ -150,11 +161,16 @@
             sortBtn.click();
             sortBtn.click();
 
-            // Show time in hours and minutes only
+            // Show date in hours and minutes only
             time = document.querySelectorAll('.time');
-
             for (let i = 0; i < time.length; i++){
                 time[i].innerHTML = time[i].innerHTML.substring(11, 16);
+            }
+
+            // Show only date
+            date2 = document.querySelectorAll('.date2');
+            for (let i = 0; i < date2.length; i++) {
+                date2[i].innerHTML = date2[i].innerHTML.substring(0, 10);
             }
 
             // GET FLIGHT INFO FROM FRONTEND TO SAVE IT IN SQL DB
@@ -173,6 +189,7 @@
                     var arrivalCode = outerDiv.querySelector('#arrival-code').innerHTML;
                     var arrivalName = outerDiv.querySelector('#arrival-name').innerHTML;
                     var totalPrice = outerDiv.querySelector('#price').innerHTML;
+                    var date2 = outerDiv.querySelector('.date2').innerHTML;
                     
                     var dropdown = document.querySelector("#dropdown");
                     var dropdownMenu = dropdown.querySelectorAll("#dropdown-menu")[i];
@@ -228,7 +245,8 @@
                                 "legDepartureTimes" : legDepartureTimes,
                                 "legDestinationCodes" : legDestinationCodes,
                                 "legDestinationNames" : legDestinationNames,
-                                "date" : date
+                                "date" : date,
+                                "date2" : date2
                             }
                         ));
                     }

@@ -13,7 +13,7 @@
     {% if messages %}
         {% for category, msg in messages %}
             {% if category == "success" %}
-                <div class="d-flex justify-content-center align-items-center mt-2">
+                <div id="login-alert" class="justify-content-center align-items-center mt-2">
                     <div class="alert alert-success w-50 mb-0" role="alert">
                         {{ msg }}
                     </div>
@@ -80,6 +80,10 @@
         setTimeout(() => {
             document.querySelectorAll('#loading')[0].style.display = 'flex';
             document.querySelector('#main-content').style.display = 'none';
+            var loginAlert = document.querySelectorAll('#login-alert');
+            if (loginAlert.length > 0) {
+                loginAlert[0].style.display = 'none';
+            }
         }, 300);
     }
 </script>

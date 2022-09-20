@@ -1,11 +1,12 @@
 import os
+import json
 import sqlite3
 import datetime
 
 from flask import Flask, redirect, render_template, request, session, flash
 from amadeus import Client, ResponseError
 from dotenv import load_dotenv
-from helpers import matchAirline, add_years, login_required
+from helpers import skyscanner_date_fromatter, matchAirline, add_years, login_required
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -30,6 +31,7 @@ def after_request(response):
     return response
 
 app.jinja_env.filters["matchAirline"] = matchAirline
+app.jinja_env.filters["date_formatter"] = skyscanner_date_fromatter
 
 load_dotenv('dotenv.env')
 
@@ -126,16 +128,14 @@ def index():
         
         session["response"] = []
 
-        for index, code in enumerate(airport_codes):
-            if index == 10:
-                break
+        for code in airport_codes:
             try:
                 flights = amadeus.shopping.flight_offers_search.get(
                     originLocationCode=code,
                     destinationLocationCode=iataCode,
                     departureDate=session["date"],
                     adults='1',
-                    max='1'
+                    max='4'
                 ).data
 
                 for entry in flights:
@@ -277,18 +277,18 @@ def results():
             cursor = con.cursor()
             
             if number_of_legs == 0:
-                sql = 'INSERT INTO favorites (departureCode, departureName, departureTime, itineraryType, arrivalTime, arrivalCode, arrivalName, totalPrice, carrierName, carrierName1, legDepartureTime1, legDestinationCode1, legDestinationName1, carrierName2, legDepartureTime2, legDestinationCode2, legDestinationName2, date, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
-                values = data["departureCode"], data["departureName"], data["departureTime"], data["itineraryType"], data["arrivalTime"], data["arrivalCode"], data["arrivalName"], data["totalPrice"], data["carriers"][0], "-", "-", "-", "-", "-", "-", "-", "-", data["date"], session["user_id"]
+                sql = 'INSERT INTO favorites (departureCode, departureName, departureTime, itineraryType, arrivalTime, arrivalCode, arrivalName, totalPrice, carrierName, carrierName1, legDepartureTime1, legDestinationCode1, legDestinationName1, carrierName2, legDepartureTime2, legDestinationCode2, legDestinationName2, date, date2, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
+                values = data["departureCode"], data["departureName"], data["departureTime"], data["itineraryType"], data["arrivalTime"], data["arrivalCode"], data["arrivalName"], data["totalPrice"], data["carriers"][0], "-", "-", "-", "-", "-", "-", "-", "-", data["date"], data["date2"], session["user_id"]
                 cursor.execute(sql, values)
 
             elif number_of_legs == 1:
-                sql = 'INSERT INTO favorites (departureCode, departureName, departureTime, itineraryType, arrivalTime, arrivalCode, arrivalName, totalPrice, carrierName, carrierName1, legDepartureTime1, legDestinationCode1, legDestinationName1, carrierName2, legDepartureTime2, legDestinationCode2, legDestinationName2, date, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
-                values = data["departureCode"], data["departureName"], data["departureTime"], data["itineraryType"], data["arrivalTime"], data["arrivalCode"], data["arrivalName"], data["totalPrice"], data["carriers"][0], data["carriers"][1], data["legDepartureTimes"][0], data["legDestinationCodes"][0], data["legDestinationNames"][0], "-", "-", "-", "-", data["date"], session["user_id"]
+                sql = 'INSERT INTO favorites (departureCode, departureName, departureTime, itineraryType, arrivalTime, arrivalCode, arrivalName, totalPrice, carrierName, carrierName1, legDepartureTime1, legDestinationCode1, legDestinationName1, carrierName2, legDepartureTime2, legDestinationCode2, legDestinationName2, date, date2, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
+                values = data["departureCode"], data["departureName"], data["departureTime"], data["itineraryType"], data["arrivalTime"], data["arrivalCode"], data["arrivalName"], data["totalPrice"], data["carriers"][0], data["carriers"][1], data["legDepartureTimes"][0], data["legDestinationCodes"][0], data["legDestinationNames"][0], "-", "-", "-", "-", data["date"], data["date2"], session["user_id"]
                 cursor.execute(sql, values)
 
             elif number_of_legs == 2:
-                sql = 'INSERT INTO favorites (departureCode, departureName, departureTime, itineraryType, arrivalTime, arrivalCode, arrivalName, totalPrice, carrierName, carrierName1, legDepartureTime1, legDestinationCode1, legDestinationName1, carrierName2, legDepartureTime2, legDestinationCode2, legDestinationName2, date, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
-                values = data["departureCode"], data["departureName"], data["departureTime"], data["itineraryType"], data["arrivalTime"], data["arrivalCode"], data["arrivalName"], data["totalPrice"], data["carriers"][0], data["carriers"][1], data["legDepartureTimes"][0], data["legDestinationCodes"][0], data["legDestinationNames"][0], data["carriers"][2], data["legDepartureTimes"][1], data["legDestinationCodes"][1], data["legDestinationNames"][1], data["date"], session["user_id"]
+                sql = 'INSERT INTO favorites (departureCode, departureName, departureTime, itineraryType, arrivalTime, arrivalCode, arrivalName, totalPrice, carrierName, carrierName1, legDepartureTime1, legDestinationCode1, legDestinationName1, carrierName2, legDepartureTime2, legDestinationCode2, legDestinationName2, date, date2, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
+                values = data["departureCode"], data["departureName"], data["departureTime"], data["itineraryType"], data["arrivalTime"], data["arrivalCode"], data["arrivalName"], data["totalPrice"], data["carriers"][0], data["carriers"][1], data["legDepartureTimes"][0], data["legDestinationCodes"][0], data["legDestinationNames"][0], data["carriers"][2], data["legDepartureTimes"][1], data["legDestinationCodes"][1], data["legDestinationNames"][1], data["date"], data["date2"], session["user_id"]
                 cursor.execute(sql, values)
                 
             return ("", 204)

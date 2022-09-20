@@ -93,6 +93,10 @@ main {
     display: flex;
 }
 
+#login-alert {
+    display: flex;
+}
+
 div#loading {
     display: none;
     height: calc(95vh - 3rem - 66px);
@@ -100,11 +104,18 @@ div#loading {
     margin-top: -3rem;
 }
 
-#apology {
-    height: 77vh;
+#button-container {
+    width: 8.5%;
 }
 
-#apology img {
-    min-width: 333px;
-    opacity: 0.85;
+#button-container button {
+    min-height: 50px;
+    max-width: 100px;
+}
+
+#skyscanner {
+    background-image: url('skyscanner.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position-x: 56%;
 }

@@ -24,7 +24,7 @@
                                     <div class="d-flex justify-content-center flex-column">
                                         <p class="text-start mb-2">Departure</p>
                                         <h3 id="departure-time" class="time text-start mb-0">{{ entry[3] }}</h3>
-                                        <p class="time text-start mt-0">{{ entry[18] }}</p>
+                                        <p class="text-start mt-0">{{ entry[18] }}</p>
                                     </div>
                                     <div class="d-flex align-items-center">
                                         {% if entry[4] == "Direct flight" %}
@@ -38,6 +38,7 @@
                                     <div class="d-flex justify-content-center flex-column">
                                         <p class="text-start mb-2">Arrival</p>
                                         <h3 id="arrival-time" class="time text-start mb-0">{{ entry[5] }}</h3>
+                                        <p class="text-start mb-2">{{ entry[19] }}</p>
                                     </div>
                                     <div class="d-flex justify-content-center flex-column">
                                         <p class=" text-start mb-0">To</p>
@@ -47,8 +48,13 @@
                                     <div class="d-flex align-items-center">
                                         <h3 class="mb-0"  id="price">{{ entry[8] }}</h3>
                                     </div>
-                                    <div class="d-flex justify-content-center align-items-center">
-                                        <button id="remove" class="btn btn-danger">Remove</button>
+                                    <div id="button-container" class="d-flex flex-column justify-content-center align-items-center">
+                                        <div class="d-flex justify-content-center align-items-center w-100 mb-4">
+                                            <button id="remove" class="btn btn-danger w-100">Remove</button>
+                                        </div>
+                                        <div class="d-flex justify-content-center align-items-center w-100">
+                                            <button id="skyscanner" onclick="window.open('https://www.skyscanner.net/transport/flights/{{ entry[1] }}/{{ entry[6] }}/{{ entry[18] | date_formatter}}', '_blank');" class="btn btn-light w-100"></button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
