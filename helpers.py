@@ -12,16 +12,13 @@ amadeus = Client(
     client_secret=os.getenv('CLIENT_SECRET')
 )
 
+
 def matchAirline(airline_code):
     try:
         airline_name = amadeus.reference_data.airlines.get(airlineCodes=airline_code).data
         return airline_name[0]['commonName']
     except ResponseError:
         return airline_code
-
-def apology(message):
-    """Render message as an apology to user."""
-    return render_template("apology.html", message=message)
 
 
 def add_years(d, years):

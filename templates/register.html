@@ -5,19 +5,27 @@
 {% endblock %}
 
 {% block main %}
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for msg in messages %}
-            <div class="d-flex justify-content-center align-items-center mb-0">
-                <div class="alert alert-success w-50" role="alert">
-                    {{ msg }}
-                </div>
-            </div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-    <div id="main-content" class="d-flex justify-content-center align-items-center flex-column">
-        <h1 class="mb-5">Register</h1>
+    <div id="main-content" class="d-flex justify-content-center align-items-center flex-column w-100">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, msg in messages %}
+                    {% if category == "success" %}
+                        <div class="d-flex justify-content-center align-items-center mb-0">
+                            <div class="alert alert-success w-100" role="alert">
+                                {{ msg }} <a href="/login" class="link-primary">Sign In</a>
+                            </div>
+                        </div>
+                    {% elif category == "error" %}
+                        <div class="d-flex justify-content-center align-items-center mb-0">
+                            <div class="alert alert-danger w-100" role="alert">
+                                {{ msg }}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <h1 class="mb-5 mt-5">Register</h1>
         <form action="/register" method="post">
             <div class="mb-3">
                 <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="username" placeholder="Username" type="text">
@@ -30,6 +38,6 @@
             </div>
             <button class="btn btn-primary" type="submit">Register</button>
         </form>
-        <p class="text-muted mt-5">Already have an account? <a href="/register">Sign In.</a></p>
+        <p class="text-muted mt-5">Already have an account? <a href="/login">Sign In.</a></p>
     </div>
 {% endblock %}

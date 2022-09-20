@@ -5,7 +5,7 @@ import datetime
 from flask import Flask, redirect, render_template, request, session, flash
 from amadeus import Client, ResponseError
 from dotenv import load_dotenv
-from helpers import matchAirline, apology, add_years, login_required
+from helpers import matchAirline, add_years, login_required
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -97,22 +97,27 @@ def index():
         session["date"] = request.form.get('date')
 
         if not session["destination"]:
-            return apology('Please select a destination!')
+            flash("Please select a destination!", "error")
+            return redirect("/") 
         elif not session["date"]:
-            return apology('Please select a date!')
+            flash("Please select a date!", "error")
+            return redirect("/") 
 
         try:
             datetime.datetime.strptime(session["date"], "%Y-%m-%d")
         except ValueError:
-            return apology('Invalid date format')
+            flash("Invalid date format", "error")
+            return redirect("/") 
 
         d1 = datetime.datetime.strptime(session["date"], "%Y-%m-%d").date()
         now = datetime.datetime.today().date()
 
         if d1 < now:
-            return apology('Date cannot be in the past!')
+            flash("Date cannot be in the past!", "error")
+            return redirect("/") 
         elif d1 > add_years(now, 1):
-            return apology('Latest possible travel date is one year from today!')
+            flash("Latest possible travel date is one year from today!", "error")
+            return redirect("/") 
 
         with sqlite3.connect('airports.db', check_same_thread=False) as con:
             cursor = con.cursor()
@@ -165,25 +170,29 @@ def register():
         if request.method == 'POST':
             username = request.form.get('username')
             if not username:
-                return apology('Please provide a username!')
+                flash("Please provide a username!", "error")
+                return redirect("/register") 
 
             password = request.form.get('password')
             if not password:
-                return apology('Please provide a password!')
+                flash("Please provide a password!", "error")
+                return redirect("/register") 
 
             confirmation = request.form.get('confirmation')
             if not confirmation or confirmation != password:
-                return apology("Passwords don't match!")
+                flash("Passwords don't match!", "error")
+                return redirect("/register") 
 
             for user in users:
                 if username == user[0]:
-                    return apology('Username is already in use!')
+                    flash("Username is already in use!", "error")
+                    return redirect("/register")    
             
             sql = "INSERT INTO users (username, hash) VALUES (?, ?)"
             values = username, generate_password_hash(password)
             cursor.execute(sql, values)
 
-            flash("Successfully registered!")
+            flash("Successfully registered!", "success")
             return redirect('/register')
         else:
             return render_template('register.html', users=users)
@@ -192,30 +201,38 @@ def register():
 #LOGIN
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-
-    session.clear()
-
-    if request.method == 'POST':
+    
+    with sqlite3.connect('airports.db', check_same_thread=False) as con:
+        cursor = con.cursor()
+        users = cursor.execute('SELECT * FROM users WHERE username = ?', (request.form.get('username'),)).fetchall()
         
-        if not request.form.get('username'):
-            return apology('Must provide username!')
+        if request.method == 'POST':
+            
+            if not request.form.get('username'):
+                flash("Must provide username!", "error")
+                return redirect("/login") 
 
-        if not request.form.get('password'):
-            return apology('Must provide password!')
+            if not request.form.get('password'):
+                flash("Must provide password!", "error")
+                return redirect("/login") 
 
-        with sqlite3.connect('airports.db', check_same_thread=False) as con:
-            cursor = con.cursor()
-            users = cursor.execute('SELECT * FROM users WHERE username = ?', (request.form.get('username'),)).fetchall()
 
-        if len(users) != 1 or not check_password_hash(users[0][2], request.form.get("password")):
-            return apology("Invalid username and/or password!")
-        
-        session["user_id"] = users[0][0]
+            if len(users) != 1 or not check_password_hash(users[0][2], request.form.get("password")):
+                flash("Invalid username and/or password!", "error")
+                return redirect("/login") 
+            
+            session["user_id"] = users[0][0]
 
-        return redirect("/")
+            flash("Logged in!", "success")
+            return redirect("/")
 
-    else:
-        return render_template("login.html")
+        else:
+            user_id = session.get("user_id")
+
+            if user_id != None:
+                return redirect("/")
+            else:
+                return render_template("login.html")
 
 
 #LOGOUT
