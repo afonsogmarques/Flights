@@ -31,27 +31,29 @@
         {% endif %}
     </div>
     <div class="d-flex justify-content-center mt-3">
-        <div style="width: 80%">
+        <div>
             <form action="/" method="post">
-            <div id="search-box" class="d-flex flex-wrap flex-row justify-content-center">
-                <div>
-                    <label for="destination" class="form-label">Destination</label>
-                    <select class="form-control dropdown text-center" name="destination" id="destination">
-                        <option selected="true" disabled>Select airport</option>
-                        {% for country in countries %}
-                            <optgroup label={{ country[0] }}>
-                                {% for i in range(airport_count[country[0]]) %}
-                                    <option>{{ country[i + 1] }}</option>
-                                {% endfor %}
-                            </optgroup>
-                        {% endfor %}
-                    </select>
+            <div id="search-box" class="d-flex flex-wrap flex-column justify-content-center align-items-center">
+                <div id="search-input" class="d-flex flex-row flex-wrap justify-content-center">
+                    <div>
+                        <label for="destination" class="form-label">Destination</label>
+                        <select class="form-control dropdown text-center" name="destination" id="destination">
+                            <option selected="true" disabled>Select airport</option>
+                            {% for country in countries %}
+                                <optgroup label={{ country[0] }}>
+                                    {% for i in range(airport_count[country[0]]) %}
+                                        <option>{{ country[i + 1] }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="origin" class="form-label">Date of travel</label>
+                        <input class="form-control date" type="date" name="date">
+                    </div>
                 </div>
-                <div>
-                    <label for="origin" class="form-label">Date of travel</label>
-                    <input class="form-control date" type="date" name="date">
-                </div>
-                <div class="d-flex align-items-end">
+                <div class="d-flex justify-content-center w-50">
                     <input class="form-control btn btn-primary" type="submit" value="Search" onclick="loading();">
                 </div>
             </div>

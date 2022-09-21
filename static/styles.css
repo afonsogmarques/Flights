@@ -106,7 +106,7 @@ div#loading {
 
 #button-container button {
     min-height: 50px;
-    max-width: 100px;
+    min-width: 90px;
 }
 
 #skyscanner {
@@ -132,4 +132,8 @@ div#loading {
 
 #search-box {
     gap: 40px;
+}
+
+#search-input {
+    gap: 30px;
 }

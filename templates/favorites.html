@@ -171,7 +171,7 @@
 
             for (let i = 0; i < removeBtn.length; i++) {
                 removeBtn[i].addEventListener("click", function() {
-                    var parentDiv = removeBtn[i].parentElement.parentElement;
+                    var parentDiv = removeBtn[i].parentElement.parentElement.parentElement;
                     var flightID = parentDiv.querySelector("#flight-id").innerHTML;
                     console.log(flightID.innerHTML);
 
