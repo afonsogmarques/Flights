@@ -120,12 +120,6 @@ div#loading {
     gap: 3vw;
 }
 
-#dropdown-flight-info {
-    padding-left: 3rem;
-    padding-right: 3rem;
-    overflow: scroll;
-}
-
 #divider {
     width: 25%;
     max-width: 300px;
