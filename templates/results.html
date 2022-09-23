@@ -70,8 +70,8 @@
                             </div>
                         </div>
                         <div id="dropdown-menu" class="dropdown-menu rounded-4 pt-5 pb-5">
-                            <div class="d-flex align-items-center flex-column">
-                                <div id="dropdown-flight-info" class="d-flex flex-row justify-content-center align-items-center w-100 ps-5 pe-5">
+                            <div id="dropdown-flight-info-parent" class="d-flex align-items-center flex-column">
+                                <div id="dropdown-flight-info" class="d-flex flex-row justify-content-center align-items-center w-100">
                                     <div class="d-flex flex-column align-items-center">
                                         <h6 id="dropdown-departure-time" class="text-muted fw-light text-center time">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['at'] }}</h6>
                                         <h4 id="dropdown-departure-code" class="mb-0" id="departure-code">{{ entry['flightOffers'][0]['itineraries'][0]['segments'][0]['departure']['iataCode'] }}</h4>

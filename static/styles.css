@@ -121,6 +121,8 @@ div#loading {
 }
 
 #dropdown-flight-info {
+    padding-left: 3rem;
+    padding-right: 3rem;
     overflow: scroll;
 }
 
@@ -136,4 +138,10 @@ div#loading {
 
 #search-input {
     gap: 30px;
+}
+
+@media (max-width: 415px) {
+    #dropdown-flight-info-parent {
+        overflow: hidden;
+    }
 }
