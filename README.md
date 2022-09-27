@@ -11,6 +11,6 @@ This web-app fetches data from an external API developed by Amadeus, which I cre
 On top of this, the user is also able to register on a persistent SQL database, and, when logged in, has the ability to save his favourite flights on his personal account, as well as removing them, case they’re no longer of interest.
 
 Unfortunately, the free version of the Amadeus API only provides outdated or mock-data, which means that iFlights does not have any real utility, at least not yet. However, if you would still like giving it a go, it is live at:
-https://ifights.herokuapp.com
+https://iflights.herokuapp.com
 
 (Due to timeouts imposed by Heroku, please select the Copenhagen airport as your destination for guaranteed results)
