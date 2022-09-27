@@ -1,7 +1,6 @@
-import os
 from amadeus import Client, ResponseError
 from dotenv import load_dotenv
-from flask import redirect, render_template, request, session
+from flask import redirect, session
 from datetime import date
 from functools import wraps
 

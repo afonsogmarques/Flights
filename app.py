@@ -3,7 +3,6 @@ import datetime
 
 from flask import Flask, redirect, render_template, request, session, flash
 from amadeus import Client, ResponseError
-from dotenv import load_dotenv
 from helpers import skyscanner_date_fromatter, matchAirline, add_years, login_required
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
