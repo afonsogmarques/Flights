@@ -32,8 +32,8 @@ app.jinja_env.filters["matchAirline"] = matchAirline
 app.jinja_env.filters["date_formatter"] = skyscanner_date_fromatter
 
 amadeus = Client(
-    client_id="1mJbRf9sS5obT0KGniu45QSmcuch307S",
-    client_secret="8QMVMyG0Z7Nmee7O"
+    client_id="5FjS2AkleL500ZgIjiGYPW0Q7e64QRDA",
+    client_secret="UlAsiAmfOHwdPEPF"
 )
 
 with sqlite3.connect('airports.db', check_same_thread=False) as con:

@@ -8,8 +8,8 @@ from functools import wraps
 load_dotenv('dotenv.env')
 
 amadeus = Client(
-    client_id="1mJbRf9sS5obT0KGniu45QSmcuch307S",
-    client_secret="8QMVMyG0Z7Nmee7O"
+    client_id="5FjS2AkleL500ZgIjiGYPW0Q7e64QRDA",
+    client_secret="UlAsiAmfOHwdPEPF"
 )
 
 
