@@ -1,6 +1,6 @@
-# iFlights
-#### Video Demo:  <https://www.youtube.com/watch?v=67DduhPebOU&ab_channel=AfonsoMarques>
-#### Description:
+# iFlights :airplane:
+#### :clapper: Video Demo:  <https://www.youtube.com/watch?v=67DduhPebOU&ab_channel=AfonsoMarques> 
+#### :memo: Description:
 
 iFlights is a "reverse" flight search engine that should ultimately allow the user to browse all scheduled flights to a provided destination (here restricted to European airports for performance's sake) on a provided date, as well as their price, not from a single selected departure location but from all of the available ones, sorted from cheapest to most expensive.
 
