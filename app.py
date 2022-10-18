@@ -31,8 +31,8 @@ app.jinja_env.filters["matchAirline"] = matchAirline
 app.jinja_env.filters["date_formatter"] = skyscanner_date_fromatter
 
 amadeus = Client(
-    client_id="5FjS2AkleL500ZgIjiGYPW0Q7e64QRDA",
-    client_secret="UlAsiAmfOHwdPEPF"
+    client_id="2JRVeS6aK7s7hETldDHq2pGcod7kktrA",
+    client_secret="hmfMtFjZqU3qBr8Z"
 )
 
 with sqlite3.connect('airports.db', check_same_thread=False) as con:
@@ -124,21 +124,27 @@ def index():
         session["response"] = []
 
         for index, code in enumerate(airport_codes):
-            try:
-                flights = amadeus.shopping.flight_offers_search.get(
-                    originLocationCode=code,
-                    destinationLocationCode=iataCode,
-                    departureDate=session["date"],
-                    adults='1',
-                    max='2'
-                ).data
+          if index == 5:
+            break
+          try:
+              flights = amadeus.shopping.flight_offers_search.get(
+                  originLocationCode=code,
+                  destinationLocationCode=iataCode,
+                  departureDate=session["date"],
+                  adults='1',
+                  max='2'
+              ).data
 
-                for entry in flights:
-                    fetchedData = amadeus.shopping.flight_offers.pricing.post(entry).data
-                    session["response"].append(fetchedData)
+              for entry in flights:
+                try:
+                  fetchedData = amadeus.shopping.flight_offers.pricing.post(entry).data
+                  session["response"].append(fetchedData)
 
-            except ResponseError as error:
-                print(error)
+                except ResponseError as error:
+                  print(error)
+
+          except ResponseError as error:
+              print(error)
 
         return redirect('/results')
 
