@@ -124,8 +124,8 @@ def index():
         session["response"] = []
 
         for index, code in enumerate(airport_codes):
-          # if index == 3:
-          #   break
+          if index == 5:
+            break
           try:
               flights = amadeus.shopping.flight_offers_search.get(
                   originLocationCode=code,
