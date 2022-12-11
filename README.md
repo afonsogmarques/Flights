@@ -1,5 +1,9 @@
 # iFlights :airplane:
-#### :clapper: Video Demo:  <https://www.youtube.com/watch?v=67DduhPebOU&ab_channel=AfonsoMarques> 
+#### :clapper: Video Demo: 
+<https://www.youtube.com/watch?v=67DduhPebOU&ab_channel=AfonsoMarques> 
+####
+#### :computer: Live Demo: 
+<https://iflights.up.railway.app/>
 #### 
 #### :memo: Description:
 
@@ -17,6 +21,4 @@ I made use of several libraries that helped me accomplish my goals with this pro
 
 
 Unfortunately, the free version of the Amadeus API only provides outdated or mock-data, which means that iFlights does not have any real utility, at least not yet. However, if you would still like giving it a go, it is live at:
-https://iflights.herokuapp.com
-
-(Due to timeouts imposed by Heroku, please select the Copenhagen airport as your destination for guaranteed results)
+https://iflights.up.railway.app/
