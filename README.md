@@ -3,7 +3,7 @@
 <https://www.youtube.com/watch?v=67DduhPebOU&ab_channel=AfonsoMarques> 
 ####
 #### :computer: Live Demo: 
-<https://iflights.up.railway.app/>
+<https://iflights.up.railway.app/> [ For guaranteed results, pick Copenhagen airport. Results can take long to load, but they do. :) ]
 #### 
 #### :memo: Description:
 
