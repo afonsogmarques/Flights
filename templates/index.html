@@ -7,7 +7,7 @@
 {% block main %}
 <div id="loading" class="flex-column justify-content-center align-items-center">
     <img src="/static/loading.gif" height="64px" width="64px" class="mb-3">
-    <p class="text-mute">Loading results.<br>This may take several minutes.</p>
+    <p class="text-mute">Results can take several minutes to load.<br>They will, however, appear. Please hold!</p>
 </div>
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
