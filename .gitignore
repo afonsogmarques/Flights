@@ -1,2 +1,5 @@
 #ignore flask_session
 /*_session/
+
+#Python cache
+__pycache__
