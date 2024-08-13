@@ -3,7 +3,7 @@
 <https://www.youtube.com/watch?v=67DduhPebOU&ab_channel=AfonsoMarques> 
 ####
 #### :computer: Live Demo: 
-<https://iflights.up.railway.app/> [ For guaranteed results, pick Copenhagen airport. Results can take long to load, but they do. :) ]
+<https://iflights.onrender.com/> [ For guaranteed results, pick Copenhagen airport. Results can take long to load, but they do. :) ]
 #### 
 #### :memo: Description:
 
@@ -21,4 +21,4 @@ I made use of several libraries that helped me accomplish my goals with this pro
 
 
 Unfortunately, the free version of the Amadeus API only provides outdated or mock-data, which means that iFlights does not have any real utility, at least not yet. However, if you would still like giving it a go, it is live at:
-https://iflights.up.railway.app/
+<https://iflights.onrender.com/>
